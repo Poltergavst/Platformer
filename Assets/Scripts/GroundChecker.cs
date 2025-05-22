@@ -15,7 +15,7 @@ public class GroundChecker : MonoBehaviour
         InitializeBoxParameters(GetComponent<Collider2D>());
     }
 
-    public bool TryGetGround(out RaycastHit2D hit, Vector2 position)
+    public bool IsGround(out RaycastHit2D hit, Vector2 position)
     {  
         hit = Physics2D.BoxCast(position, _boxSize, _boxAngle, Vector2.down, _distanceToColliderBottom + _groundCheckDistance, _groundMask);
 

@@ -6,6 +6,8 @@ public abstract class Follower : MonoBehaviour
     [SerializeField] protected Transform _target;
     [SerializeField] protected LevelBounds _levelBounds;
 
+    private Vector3 _targetPosition; 
+
     protected Vector2 _minBounds;
     protected Vector2 _maxBounds;
 
@@ -28,8 +30,13 @@ public abstract class Follower : MonoBehaviour
         {
             SnapToTarget(_target.position);
         }
-        
-        FollowTarget(transform.position, GetTargetPosition(_target.position), _smoothTime);
+
+        _targetPosition = GetTargetPosition(_target.position);
+    }
+
+    protected virtual void LateUpdate()
+    {
+        FollowTarget(transform.position, _targetPosition, _smoothTime);
     }
 
     protected abstract bool IsTargetOutOfReach();

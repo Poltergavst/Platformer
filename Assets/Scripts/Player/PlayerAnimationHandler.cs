@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public enum PlayerAnimatorStates
+public static class PlayerAnimatorStates
 {
-    PlayerIdle,
-    PlayerRun,
-    PlayerJump,
-    PlayerFall,
-    Empty
+    public static readonly int Empty = Animator.StringToHash(nameof(Empty));
+    public static readonly int PlayerRun = Animator.StringToHash(nameof(PlayerRun));
+    public static readonly int PlayerIdle = Animator.StringToHash(nameof(PlayerIdle));
+    public static readonly int PlayerJump = Animator.StringToHash(nameof(PlayerJump));
+    public static readonly int PlayerFall = Animator.StringToHash(nameof(PlayerFall));
 }
 
 [RequireComponent (typeof(Animator), typeof(SpriteRenderer))]
@@ -36,9 +36,9 @@ public class PlayerAnimationHandler : MonoBehaviour
         PlayState(PlayerAnimatorStates.PlayerIdle);
     }
 
-    public void PlayState(PlayerAnimatorStates state)
+    public void PlayState(int id)
     {
-        _animator.Play(state.ToString());
+        _animator.Play(id);
     }
 
     private void ResetFrame()

@@ -9,10 +9,10 @@ public class LevelBounds: MonoBehaviour
 
     private void Awake()
     {
-        GetBounds();
+        SetBounds();
     }
 
-    public void GetBounds()
+    public void SetBounds()
     {
         MaxBounds = _boundingCollider.bounds.max;
         MinBounds = _boundingCollider.bounds.min;

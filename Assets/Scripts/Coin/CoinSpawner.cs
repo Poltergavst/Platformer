@@ -129,12 +129,12 @@ public class CoinSpawner : MonoBehaviour
 
     private void Subscribe(Coin coin)
     {
-        coin.CoinCollected += Despawn;
+        coin.Collected += Despawn;
     }
 
     private void Unsubscribe(Coin coin)
     {
-        coin.CoinCollected -= Despawn;
+        coin.Collected -= Despawn;
     }
 
     private void DoToAllCoins(CoinDelegate operation)

@@ -6,17 +6,17 @@ public class PlayerMovement : Mover
     [SerializeField] private float _jumpForce;
     [SerializeField] private float _fallGravityMultiplier;
 
-    private bool _isJumpPressed;
-    private float _horizontalInput;
+    private InputReader _inputReader;
+
     private int _stepsSinceLastGrounded, _stepsSinceLastJump;
 
-    public event Action<PlayerAnimatorStates> Running, Standing, Jumping, Falling;
+    public event Action<int> Ran, Stopped, Jumped, Fell;
 
     protected override void Awake()
     {
-        base.Awake();
+        _inputReader = GetComponent<InputReader>();
 
-        _isJumpPressed = false;
+        base.Awake();
     }
 
     protected override void FixedUpdate()
@@ -25,9 +25,10 @@ public class PlayerMovement : Mover
         _stepsSinceLastJump++;
 
         base.FixedUpdate();
-        Turn(Vector2.zero.x, _horizontalInput);
 
-        if (_groundChecker.TryGetGround(out RaycastHit2D ground, transform.position))
+        Turn(Vector2.zero.x, _inputReader.Direction);
+
+        if (_groundChecker.IsGround(out RaycastHit2D ground, transform.position))
         {
             PerformGroundedActions(ground);
         }
@@ -35,22 +36,11 @@ public class PlayerMovement : Mover
         {
             PerformMidAirActions();
         }
-
-        _isJumpPressed = false;
     }
 
-    private void Update()
-    {
-        _horizontalInput = Input.GetAxis("Horizontal");
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            _isJumpPressed = true;
-        }
-    }
     public void Jump()
     {
-        Jumping?.Invoke(PlayerAnimatorStates.PlayerJump);
+        Jumped?.Invoke(PlayerAnimatorStates.PlayerJump);
 
         _stepsSinceLastJump = 0;
         _rigidbody.velocity = _rigidbody.velocity.Change(y: _jumpForce);
@@ -58,23 +48,23 @@ public class PlayerMovement : Mover
 
     protected override void Move()
     {
-        _rigidbody.velocity = _rigidbody.velocity.Change(x: _horizontalInput * _speed);
+        _rigidbody.velocity = _rigidbody.velocity.Change(x: _inputReader.Direction * _speed);
     }
 
     private void PerformGroundedActions(RaycastHit2D ground)
     {
         _stepsSinceLastGrounded = 0;
 
-        if (_horizontalInput != 0)
+        if (_inputReader.Direction != 0)
         {
-            Running?.Invoke(PlayerAnimatorStates.PlayerRun);
+            Ran?.Invoke(PlayerAnimatorStates.PlayerRun);
         }
         else
         {
-            Standing?.Invoke(PlayerAnimatorStates.PlayerIdle);
+            Stopped?.Invoke(PlayerAnimatorStates.PlayerIdle);
         }
 
-        if (_isJumpPressed == true)
+        if (_inputReader.IsJumpPressed() == true)
         {
             Jump();
         }
@@ -92,7 +82,7 @@ public class PlayerMovement : Mover
     {
         if (_rigidbody.velocity.y < 0)
         {
-            Falling?.Invoke(PlayerAnimatorStates.PlayerFall);
+            Fell?.Invoke(PlayerAnimatorStates.PlayerFall);
 
             _rigidbody.velocity += (_fallGravityMultiplier - 1) * Time.fixedDeltaTime * Physics2D.gravity * Vector2.up;
         }
@@ -100,7 +90,7 @@ public class PlayerMovement : Mover
     
     private void HandleSlopes(RaycastHit2D ground)
     {
-        if (IsOnSlope(ground) && _isJumpPressed == false && _horizontalInput == 0)
+        if (IsOnSlope(ground) && _inputReader.IsJumpPressed() == false && _inputReader.Direction == 0)
         {
             _rigidbody.gravityScale = 0;
             _rigidbody.velocity = Vector3.zero;

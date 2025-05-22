@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
 
         _knockbacker.GetKnockbacked(hitterPosition);
 
-        if (isLethal == true)
+        if (isLethal)
         {
             Die();
         }
@@ -100,23 +100,23 @@ public class Player : MonoBehaviour
 
     private void Subscribe()
     {
-        _knockbacker.EndOfKnockback += StartMovement;
-        _knockbacker.StartOfKnockback += StopMovement;
+        _knockbacker.KnockbackEnded += StartMovement;
+        _knockbacker.KnockbackStarted += StopMovement;
 
-        _movement.Running += _animationHandler.PlayState;
-        _movement.Standing += _animationHandler.PlayState;
-        _movement.Jumping += _animationHandler.PlayState;
-        _movement.Falling += _animationHandler.PlayState;
+        _movement.Ran += _animationHandler.PlayState;
+        _movement.Stopped += _animationHandler.PlayState;
+        _movement.Jumped += _animationHandler.PlayState;
+        _movement.Fell += _animationHandler.PlayState;
     }
 
     private void Unsubscribe()
     {
-        _knockbacker.EndOfKnockback -= StartMovement;
-        _knockbacker.StartOfKnockback -= StopMovement;
+        _knockbacker.KnockbackEnded -= StartMovement;
+        _knockbacker.KnockbackStarted -= StopMovement;
 
-        _movement.Running -= _animationHandler.PlayState;
-        _movement.Standing -= _animationHandler.PlayState;
-        _movement.Jumping -= _animationHandler.PlayState;
-        _movement.Falling -= _animationHandler.PlayState;
+        _movement.Ran -= _animationHandler.PlayState;
+        _movement.Stopped -= _animationHandler.PlayState;
+        _movement.Jumped -= _animationHandler.PlayState;
+        _movement.Fell -= _animationHandler.PlayState;
     }
 }

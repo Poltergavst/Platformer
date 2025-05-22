@@ -13,8 +13,8 @@ public class Knockbacker : MonoBehaviour
 
     private Coroutine _coroutine;
 
-    public event Action EndOfKnockback;
-    public event Action StartOfKnockback;
+    public event Action KnockbackEnded;
+    public event Action KnockbackStarted;
 
     private void Start()
     {
@@ -23,7 +23,7 @@ public class Knockbacker : MonoBehaviour
 
     public void GetKnockbacked(Vector3 senderPosition)
     {
-        StartOfKnockback?.Invoke();
+        KnockbackStarted?.Invoke();
 
         if (_coroutine != null)
         {
@@ -49,6 +49,6 @@ public class Knockbacker : MonoBehaviour
 
         yield return wait;
 
-        EndOfKnockback?.Invoke();
+        KnockbackEnded?.Invoke();
     }
 }

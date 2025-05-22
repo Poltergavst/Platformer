@@ -12,7 +12,7 @@ public class HeightChangeDetector : MonoBehaviour
 
         Vector2 edgePosition = transform.position;
 
-        if (groundChecker.TryGetGround(out RaycastHit2D hit, edgePosition))
+        if (groundChecker.IsGround(out RaycastHit2D hit, edgePosition))
         {
             currentHeight = hit.point.y;
 
