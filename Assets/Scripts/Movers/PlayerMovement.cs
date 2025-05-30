@@ -8,9 +8,15 @@ public class PlayerMovement : Mover
 
     private InputReader _inputReader;
 
-    private int _stepsSinceLastGrounded, _stepsSinceLastJump;
+    private bool _isJumping;
 
-    public event Action<int> Ran, Stopped, Jumped, Fell;
+    private int _stepsSinceLastJump;
+    private int _stepsSinceLastGrounded;
+
+    public event Action<int> Ran;
+    public event Action<int> Stopped;
+    public event Action<int> Jumped;
+    public event Action<int> Fell;
 
     protected override void Awake()
     {
@@ -26,7 +32,9 @@ public class PlayerMovement : Mover
 
         base.FixedUpdate();
 
-        Turn(Vector2.zero.x, _inputReader.Direction);
+        _rotator.Turn(Vector2.zero.x, _inputReader.Direction);
+
+        _isJumping = _inputReader.IsJumpPressed();
 
         if (_groundChecker.IsGround(out RaycastHit2D ground, transform.position))
         {
@@ -64,7 +72,7 @@ public class PlayerMovement : Mover
             Stopped?.Invoke(PlayerAnimatorStates.PlayerIdle);
         }
 
-        if (_inputReader.IsJumpPressed() == true)
+        if(_isJumping)
         {
             Jump();
         }

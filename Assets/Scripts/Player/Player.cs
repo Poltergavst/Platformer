@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
 
     private bool _isDead;
 
-    private void OnEnable()
+    private void Awake()
     {
         _isDead = false;
 
@@ -24,7 +24,10 @@ public class Player : MonoBehaviour
         _movement = GetComponent<PlayerMovement>();
         _knockbacker = GetComponent<Knockbacker>();
         _animationHandler = GetComponent<PlayerAnimationHandler>();
+    }
 
+    private void OnEnable()
+    {
         Subscribe();
     }
 

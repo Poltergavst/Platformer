@@ -24,6 +24,7 @@ public class CoinSpawner : MonoBehaviour
         _unactiveCoins = new List<Coin>();
 
         Mathf.Clamp(_activeCoinAmount, minCoinAmount, _spawnPositions.Length);
+
         CreateCoinsAtSpawnpoints();
     }
 

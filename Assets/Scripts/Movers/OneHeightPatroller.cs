@@ -27,7 +27,7 @@ public class OneHeightPatroller : Mover
         if (HasReachedDestination())
         {
             _currentDestination = GetNextDestination();
-            Turn(_rigidbody.position.x, _currentDestination.x);
+            _rotator.Turn(_rigidbody.position.x, _currentDestination.x);
         }
 
         base.FixedUpdate();
