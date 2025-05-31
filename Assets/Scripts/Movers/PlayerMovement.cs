@@ -32,11 +32,11 @@ public class PlayerMovement : Mover
 
         base.FixedUpdate();
 
-        _rotator.Turn(Vector2.zero.x, _inputReader.Direction);
+        Rotator.Turn(Vector2.zero.x, _inputReader.Direction);
 
         _isJumping = _inputReader.IsJumpPressed();
 
-        if (_groundChecker.IsGround(out RaycastHit2D ground, transform.position))
+        if (GroundChecker.IsGround(out RaycastHit2D ground, transform.position))
         {
             PerformGroundedActions(ground);
         }
@@ -51,12 +51,12 @@ public class PlayerMovement : Mover
         Jumped?.Invoke(PlayerAnimatorStates.PlayerJump);
 
         _stepsSinceLastJump = 0;
-        _rigidbody.velocity = _rigidbody.velocity.Change(y: _jumpForce);
+        Rigidbody.velocity = Rigidbody.velocity.Change(y: _jumpForce);
     }
 
     protected override void Move()
     {
-        _rigidbody.velocity = _rigidbody.velocity.Change(x: _inputReader.Direction * _speed);
+        Rigidbody.velocity = Rigidbody.velocity.Change(x: _inputReader.Direction * Speed);
     }
 
     private void PerformGroundedActions(RaycastHit2D ground)
@@ -88,11 +88,11 @@ public class PlayerMovement : Mover
 
     private void HandleFall()
     {
-        if (_rigidbody.velocity.y < 0)
+        if (Rigidbody.velocity.y < 0)
         {
             Fell?.Invoke(PlayerAnimatorStates.PlayerFall);
 
-            _rigidbody.velocity += (_fallGravityMultiplier - 1) * Time.fixedDeltaTime * Physics2D.gravity * Vector2.up;
+            Rigidbody.velocity += (_fallGravityMultiplier - 1) * Time.fixedDeltaTime * Physics2D.gravity * Vector2.up;
         }
     }
     
@@ -100,12 +100,12 @@ public class PlayerMovement : Mover
     {
         if (IsOnSlope(ground) && _inputReader.IsJumpPressed() == false && _inputReader.Direction == 0)
         {
-            _rigidbody.gravityScale = 0;
-            _rigidbody.velocity = Vector3.zero;
+            Rigidbody.gravityScale = 0;
+            Rigidbody.velocity = Vector3.zero;
         }
         else
         {
-            _rigidbody.gravityScale = 1;
+            Rigidbody.gravityScale = 1;
         }
     }
 
@@ -121,18 +121,18 @@ public class PlayerMovement : Mover
             return;
         }
 
-        RaycastHit2D hitBelow = Physics2D.Raycast(_rigidbody.position, Vector2.down);
+        RaycastHit2D hitBelow = Physics2D.Raycast(Rigidbody.position, Vector2.down);
 
         if (hitBelow)
         {
             _stepsSinceLastGrounded = 0;
 
-            float speed = _rigidbody.velocity.magnitude;
-            float projectedDistance = Vector2.Dot(_rigidbody.velocity, hitBelow.normal);
+            float speed = Rigidbody.velocity.magnitude;
+            float projectedDistance = Vector2.Dot(Rigidbody.velocity, hitBelow.normal);
 
             if (projectedDistance > 0f)
             {
-                _rigidbody.velocity = (hitBelow.normal * projectedDistance).DirectionTo(_rigidbody.velocity) * speed;
+                Rigidbody.velocity = (hitBelow.normal * projectedDistance).DirectionTo(Rigidbody.velocity) * speed;
             }
         }
     }

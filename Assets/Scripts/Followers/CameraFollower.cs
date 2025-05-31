@@ -44,8 +44,8 @@ public class CameraFollower : Follower
 
         Vector2 cameraHalfSize = new Vector2(cameraHalfWidth, cameraHalfHeight);
 
-        _minBounds = _levelBounds.MinBounds + cameraHalfSize;
-        _maxBounds = _levelBounds.MaxBounds - cameraHalfSize;
+        MinBounds = _levelBounds.MinBounds + cameraHalfSize;
+        MaxBounds = _levelBounds.MaxBounds - cameraHalfSize;
     }
 
     private void PlaceAhead()

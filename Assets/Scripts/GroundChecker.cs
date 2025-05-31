@@ -5,10 +5,10 @@ using UnityEngine;
 [RequireComponent (typeof(Collider2D))]
 public class GroundChecker : MonoBehaviour
 {
+    private const int BufferSize = 1;
+
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private float _groundCheckDistance;
-
-    private const int BufferSize = 1;
 
     private float _distanceToColliderBottom;
     private float _boxAngle;

@@ -32,8 +32,8 @@ public class BackgroundFollower : Follower
 
     protected override void SetBounds()
     {
-        _minBounds = _levelBounds.MinBounds + _spriteHalfSize;
-        _maxBounds = _levelBounds.MaxBounds - _spriteHalfSize;
+        MinBounds = _levelBounds.MinBounds + _spriteHalfSize;
+        MaxBounds = _levelBounds.MaxBounds - _spriteHalfSize;
     }
 
     protected override bool IsTargetOutOfReach()

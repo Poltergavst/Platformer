@@ -6,16 +6,16 @@ public abstract class Follower : MonoBehaviour
     [SerializeField] protected Transform _target;
     [SerializeField] protected LevelBounds _levelBounds;
 
+    protected Vector2 MinBounds;
+    protected Vector2 MaxBounds;
+
+    protected Vector3 Velocity;
+
     private Vector3 _targetPosition; 
-
-    protected Vector2 _minBounds;
-    protected Vector2 _maxBounds;
-
-    protected Vector3 _velocity;
 
     protected virtual void Awake()
     {
-        _velocity = Vector3.zero;
+        Velocity = Vector3.zero;
     }
 
     protected virtual void Start()
@@ -48,21 +48,21 @@ public abstract class Follower : MonoBehaviour
 
     protected virtual void SetBounds()
     {
-        _minBounds = _levelBounds.MinBounds;
-        _maxBounds = _levelBounds.MaxBounds;
+        MinBounds = _levelBounds.MinBounds;
+        MaxBounds = _levelBounds.MaxBounds;
     }
 
     protected void FollowTarget(Vector3 currentPosition, Vector3 targetPosition, float smoothTime)
     {
-        transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, ref _velocity, smoothTime);
+        transform.position = Vector3.SmoothDamp(currentPosition, targetPosition, ref Velocity, smoothTime);
     }
 
     protected Vector3 KeepInBounds(Vector3 position)
     {
         Vector3 boundedPosition;
 
-        float clampedX = Mathf.Clamp(position.x, _minBounds.x, _maxBounds.x);
-        float clampedY = Mathf.Clamp(position.y, _minBounds.y, _maxBounds.y);
+        float clampedX = Mathf.Clamp(position.x, MinBounds.x, MaxBounds.x);
+        float clampedY = Mathf.Clamp(position.y, MinBounds.y, MaxBounds.y);
 
         boundedPosition = new Vector3(clampedX, clampedY, transform.position.z);
 

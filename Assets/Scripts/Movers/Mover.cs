@@ -4,17 +4,17 @@ using UnityEngine;
 [RequireComponent(typeof(Rotator), typeof(GroundChecker))]
 public abstract class Mover : MonoBehaviour
 {
-    [SerializeField] protected float _speed;
+    [SerializeField] protected float Speed;
 
-    protected Rotator _rotator;
-    protected Rigidbody2D _rigidbody;
-    protected GroundChecker _groundChecker;
+    protected Rotator Rotator;
+    protected Rigidbody2D Rigidbody;
+    protected GroundChecker GroundChecker;
 
     protected virtual void Awake()
     {
-        _rotator = GetComponent<Rotator>();
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _groundChecker = GetComponent<GroundChecker>();
+        Rotator = GetComponent<Rotator>();
+        Rigidbody = GetComponent<Rigidbody2D>();
+        GroundChecker = GetComponent<GroundChecker>();
     }
 
     protected virtual void FixedUpdate()

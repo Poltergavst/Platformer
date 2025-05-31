@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(HeightChangeDetector))]
 public class OneHeightPatroller : Mover
 {
     private HeightChangeDetector _heightChangeDetector;
@@ -18,8 +19,8 @@ public class OneHeightPatroller : Mover
     {
         _currentDestination = transform.position;
 
-        _leftWaypoint = _heightChangeDetector.FindEdgeInDirection(Vector2.left, _groundChecker);
-        _rightWaypoint = _heightChangeDetector.FindEdgeInDirection(Vector2.right, _groundChecker);
+        _leftWaypoint = _heightChangeDetector.FindEdgeInDirection(Vector2.left, GroundChecker);
+        _rightWaypoint = _heightChangeDetector.FindEdgeInDirection(Vector2.right, GroundChecker);
     }
 
     protected override void FixedUpdate()
@@ -27,7 +28,7 @@ public class OneHeightPatroller : Mover
         if (HasReachedDestination())
         {
             _currentDestination = GetNextDestination();
-            _rotator.Turn(_rigidbody.position.x, _currentDestination.x);
+            Rotator.Turn(Rigidbody.position.x, _currentDestination.x);
         }
 
         base.FixedUpdate();
@@ -35,14 +36,14 @@ public class OneHeightPatroller : Mover
 
     protected override void Move()
     {
-        Vector2 newPosition = _rigidbody.position + _rigidbody.position.DirectionTo(_currentDestination) * _speed * Time.fixedDeltaTime;
+        Vector2 newPosition = Rigidbody.position + Rigidbody.position.DirectionTo(_currentDestination) * Speed * Time.fixedDeltaTime;
 
-        _rigidbody.MovePosition(newPosition);
+        Rigidbody.MovePosition(newPosition);
     }
 
     private bool HasReachedDestination()
     {
-        return _rigidbody.position.IsEnoughCloseTo(_currentDestination, 0.3f);
+        return Rigidbody.position.IsEnoughCloseTo(_currentDestination, 0.3f);
     }
 
     private Vector2 GetNextDestination()
