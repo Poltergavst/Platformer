@@ -32,12 +32,14 @@ public abstract class Follower : MonoBehaviour
         }
 
         _targetPosition = GetTargetPosition(_target.position);
-    }
 
-    protected virtual void LateUpdate()
-    {
         FollowTarget(transform.position, _targetPosition, _smoothTime);
     }
+
+    //protected virtual void LateUpdate()
+    //{
+    //    FollowTarget(transform.position, _targetPosition, _smoothTime);
+    //}
 
     protected abstract bool IsTargetOutOfReach();
 

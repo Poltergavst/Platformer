@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     private Knockbacker _knockbacker;
     private PlayerAnimationHandler _animationHandler;
 
+    private Health _health;
+
     private bool _isDead;
 
     private void Awake()
@@ -21,9 +23,12 @@ public class Player : MonoBehaviour
         _isDead = false;
 
         _collider = GetComponent<Collider2D>();
+
         _movement = GetComponent<PlayerMovement>();
         _knockbacker = GetComponent<Knockbacker>();
         _animationHandler = GetComponent<PlayerAnimationHandler>();
+
+        _health = new Health(5);
     }
 
     private void OnEnable()

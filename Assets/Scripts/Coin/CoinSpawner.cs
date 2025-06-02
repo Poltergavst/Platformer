@@ -7,36 +7,36 @@ public class CoinSpawner : MonoBehaviour
     [SerializeField] private int _activeCoinAmount;
     [SerializeField] private float _secondsBeforeRespawn;
 
-    [SerializeField] private Coin _prefab;
+    [SerializeField] private ICollectable _prefab;
     [SerializeField] private Transform _spawnpointsContainer;
     [SerializeField] private Vector2[] _spawnPositions;
     [SerializeField] private LayerMask _dontSpawnOnTop;
 
-    private Coin[] _coins;
-    private List<Coin> _unactiveCoins;
+    private ICollectable[] _coins;
+    private List<ICollectable> _unactiveCoins;
 
-    private delegate void CoinDelegate(Coin coin);
+    private delegate void CoinDelegate(ICollectable coin);
 
     private void Awake()
     {
         int minCoinAmount = 0;
 
-        _unactiveCoins = new List<Coin>();
+        _unactiveCoins = new List<ICollectable>();
 
         Mathf.Clamp(_activeCoinAmount, minCoinAmount, _spawnPositions.Length);
 
         CreateCoinsAtSpawnpoints();
     }
 
-    private void OnEnable() 
-    {
-        DoToAllCoins(Subscribe);
-    }
+    //private void OnEnable() 
+    //{
+    //    DoToAllCoins(Subscribe);
+    //}
 
-    private void OnDisable()
-    {
-        DoToAllCoins(Unsubscribe);
-    }
+    //private void OnDisable()
+    //{
+    //    DoToAllCoins(Unsubscribe);
+    //}
 
     private void Start()
     {
@@ -48,7 +48,7 @@ public class CoinSpawner : MonoBehaviour
         int amountOfCoin = _spawnPositions.Length;
         Transform coinsCointainer = new GameObject("Coins").transform;
 
-        _coins = new Coin[amountOfCoin];
+        _coins = new ICollectable[amountOfCoin];
 
         for (int i = 0; i < amountOfCoin; i++)
         {
@@ -57,7 +57,7 @@ public class CoinSpawner : MonoBehaviour
             Deactivate(_coins[i]);
         }
     }
-    private Coin PickRandomCoin()
+    private ICollectable PickRandomCoin()
     {
         int minValue = 0;
         int maxValue = _unactiveCoins.Count;
@@ -82,7 +82,7 @@ public class CoinSpawner : MonoBehaviour
     {
         float searchRadius = 1f;
 
-        Coin coin = PickRandomCoin();
+        ICollectable coin = PickRandomCoin();
 
         if (coin != null)
         {
@@ -98,7 +98,7 @@ public class CoinSpawner : MonoBehaviour
         Activate(coin);
     }
 
-    private void Despawn(Coin coin)
+    private void Despawn(ICollectable coin)
     {
         Deactivate(coin);
         StartCoroutine(Respawn());
@@ -113,7 +113,7 @@ public class CoinSpawner : MonoBehaviour
         Spawn();
     }
 
-    private void Activate(Coin coin)
+    private void Activate(ICollectable coin)
     {
         if (coin != null)
         {
@@ -122,25 +122,25 @@ public class CoinSpawner : MonoBehaviour
         }
     }
 
-    private void Deactivate(Coin coin)
+    private void Deactivate(ICollectable coin)
     {
         _unactiveCoins.Add(coin);
         coin.gameObject.SetActive(false);
     }
 
-    private void Subscribe(Coin coin)
-    {
-        coin.Collected += Despawn;
-    }
+    //private void Subscribe(ICollectable coin)
+    //{
+    //    coin.Collected += Despawn;
+    //}
 
-    private void Unsubscribe(Coin coin)
-    {
-        coin.Collected -= Despawn;
-    }
+    //private void Unsubscribe(ICollectable coin)
+    //{
+    //    coin.Collected -= Despawn;
+    //}
 
     private void DoToAllCoins(CoinDelegate operation)
     {
-        foreach (Coin coin in _coins)
+        foreach (ICollectable coin in _coins)
         {
             operation(coin);
         }

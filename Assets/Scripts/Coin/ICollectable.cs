@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class ICollectable : MonoBehaviour
 {
-    public event Action<Coin> Collected;
+    public static event Action<ICollectable> Collected;
 
     public void Collect()
     {

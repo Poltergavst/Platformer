@@ -4,9 +4,9 @@ public class Collector : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Coin>(out Coin coin))
+        if (collision.TryGetComponent<ICollectable>(out ICollectable item))
         {
-            coin.Collect();
+            item.Collect();
         }
     }
 }
