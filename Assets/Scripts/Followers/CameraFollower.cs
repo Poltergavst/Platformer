@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent (typeof(Camera))]
-public class CameraFollower : Follower
+public class CameraFollower : ConstantFollower
 {
     private Camera _camera;
     private Vector3 _offset;

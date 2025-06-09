@@ -108,6 +108,8 @@ public class Player : MonoBehaviour
 
     private void Subscribe()
     {
+        _health.Expired += Die;
+
         _knockbacker.KnockbackEnded += StartMovement;
         _knockbacker.KnockbackStarted += StopMovement;
 
@@ -119,6 +121,8 @@ public class Player : MonoBehaviour
 
     private void Unsubscribe()
     {
+        _health.Expired -= Die;
+
         _knockbacker.KnockbackEnded -= StartMovement;
         _knockbacker.KnockbackStarted -= StopMovement;
 

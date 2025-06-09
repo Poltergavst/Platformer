@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
-public class Spawner : MonoBehaviour
+public abstract class CollectableSpawner<T> : MonoBehaviour where T: MonoBehaviour, ICollectable
 {
-    [SerializeField] private ICollectable _prefab;
+    [SerializeField] private T _prefab;
 
     [SerializeField] private int _activeAmount;
     [SerializeField] private float _secondsBeforeRespawn;
@@ -13,30 +14,18 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Vector2[] _spawnPositions;
     [SerializeField] private LayerMask _dontSpawnOnTop;
 
-    private ICollectable[] _items;
-    private List<ICollectable> _unactiveItems;
-
-    private delegate void ItemDelegate(ICollectable item);
+    private T[] _items;
+    private List<T> _unactiveItems;
 
     private void Awake()
     {
         int minItemAmount = 0;
 
-        _unactiveItems = new List<ICollectable>();
+        _unactiveItems = new List<T>();
 
         Mathf.Clamp(_activeAmount, minItemAmount, _spawnPositions.Length);
 
         CreateItemsAtSpawnpoints();
-    }
-
-    private void OnEnable()
-    {
-        ICollectable.Collected += Despawn;
-    }
-
-    private void OnDisable()
-    {
-        ICollectable.Collected -= Despawn;
     }
 
     private void Start()
@@ -50,7 +39,7 @@ public class Spawner : MonoBehaviour
 
         Transform itemsContainer = new GameObject("Items").transform;
 
-        _items = new ICollectable[amountOfItems];
+        _items = new T[amountOfItems];
 
         for (int i = 0; i < amountOfItems; i++)
         {
@@ -59,7 +48,7 @@ public class Spawner : MonoBehaviour
             Deactivate(_items[i]);
         }
     }
-    private ICollectable PickRandomItem()
+    private T PickRandomItem()
     {
         int minValue = 0;
         int maxValue = _unactiveItems.Count;
@@ -82,27 +71,31 @@ public class Spawner : MonoBehaviour
 
     private void Spawn()
     {
-        float searchRadius = 1f;
+        int maxAttempts = 10;
+        float searchRadius = 1.5f;
 
-        ICollectable item = PickRandomItem();
-
-        if (item != null)
+        for (int i = 0; i <= maxAttempts; i++)
         {
-            bool isSpawnpointOccupied = Physics2D.OverlapCircle(item.transform.position, searchRadius, _dontSpawnOnTop);
+            T item = PickRandomItem();
 
-            if (isSpawnpointOccupied)
+            if (item != null)
             {
-                StartCoroutine(Respawn());
-                return;
+                bool isSpawnpointOccupied = Physics2D.OverlapCircle(item.transform.position, searchRadius, _dontSpawnOnTop);
+
+                if (isSpawnpointOccupied == false)
+                {
+                    Activate(item);
+                    return;
+                }
             }
         }
 
-        Activate(item);
+        StartCoroutine(Respawn());
     }
 
-    private void Despawn(ICollectable coin)
+    protected void Despawn(T item)
     {
-        Deactivate(coin);
+        Deactivate(item);
         StartCoroutine(Respawn());
     }
 
@@ -115,7 +108,7 @@ public class Spawner : MonoBehaviour
         Spawn();
     }
 
-    private void Activate(ICollectable item)
+    private void Activate(T item)
     {
         if (item != null)
         {
@@ -124,7 +117,7 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    private void Deactivate(ICollectable item)
+    private void Deactivate(T item)
     {
         _unactiveItems.Add(item);
         item.gameObject.SetActive(false);
@@ -140,11 +133,12 @@ public class Spawner : MonoBehaviour
 
         for (int i = 0; i < pointCount; i++)
             _spawnPositions[i] = _spawnpointsContainer.GetChild(i).position;
+
+        Gizmos.color = Random.ColorHSV();
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
 
         foreach (Vector2 spawnPosition in _spawnPositions)
         {

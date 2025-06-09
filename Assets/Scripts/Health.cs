@@ -7,7 +7,7 @@ public class Health
     private int _maxHealth;
     private int _minHealth;
 
-    public event Action HealthExpired;
+    public event Action Expired;
 
     public Health(int maxHealth)
     {
@@ -23,7 +23,7 @@ public class Health
 
         if (_health <= _minHealth) 
         { 
-            HealthExpired?.Invoke();
+            Expired?.Invoke();
         }
     }
 
