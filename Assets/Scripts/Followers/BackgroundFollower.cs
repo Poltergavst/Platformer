@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent (typeof(SpriteRenderer))]
-public class BackgroundFollower : ConstantFollower
+public class BackgroundFollower : Follower
 {
     [SerializeField] private Camera _camera;
 
