@@ -36,24 +36,31 @@ public class GroundChaser : GroundMover
     {
         Vector3 targetPosition = _target.position;
         Vector3 searcherPosition = transform.position;
+        Vector3 lookingDirection;
 
-        _sightDistance = 3f;
+        float viewRadius = 3f;
+        float viewAngle = 180f;
 
-        //GroundChecker.
-
-        if (searcherPosition.SqrDistanceTo(targetPosition) < _sightDistance * _sightDistance)
+        if(Rotator.IsFacingRight)
         {
-            if (IsFacingTarget(targetPosition, searcherPosition))
-            {
-                if (_isTargetInSight == false)
-                    TargetDetected?.Invoke();
-            }
-
-            return true;
+            lookingDirection = Vector3.right;
+        }
+        else
+        {
+            lookingDirection = Vector3.left;
         }
 
-        if (_isTargetInSight)
-            TargetLost?.Invoke();
+        if (searcherPosition.IsEnoughCloseTo(targetPosition, viewRadius))
+        {
+
+            if (Vector3.Angle(lookingDirection, searcherPosition.DirectionTo(targetPosition)) < viewAngle / 2f)
+            {
+                TargetDetected?.Invoke();
+                return true;
+            }
+        }
+
+        TargetLost?.Invoke();
 
         return false;
     }

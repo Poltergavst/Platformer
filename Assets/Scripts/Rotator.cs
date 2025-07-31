@@ -4,7 +4,7 @@ public class Rotator: MonoBehaviour
 {
     public bool IsFacingRight { get; private set; }
 
-    public void Turn(float position, float direction)
+    public void Turn(float positionX, float directionX)
     {
         int rotationValue;
         int rightTurnValue = 0;
@@ -12,9 +12,9 @@ public class Rotator: MonoBehaviour
 
         Quaternion initialRotation = transform.rotation;
 
-        if (direction != position)
+        if (directionX != positionX)
         {
-            IsFacingRight = direction > position;
+            IsFacingRight = directionX > positionX;
 
             rotationValue = IsFacingRight ? rightTurnValue : leftTurnValue;
 
