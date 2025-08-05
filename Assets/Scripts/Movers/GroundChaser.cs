@@ -6,7 +6,6 @@ public class GroundChaser : GroundMover
     [SerializeField] private float _sightDistance;
     [SerializeField] private Transform _target;
 
-    private bool _isTargetInSight;
     public override void Move() => Chase();
 
     public event Action TargetDetected;
@@ -28,8 +27,7 @@ public class GroundChaser : GroundMover
 
     private void FixedUpdate()
     {
-        _isTargetInSight = IsTargetInSight();
-        Debug.Log(_isTargetInSight);
+        IsTargetInSight();
     }
 
     private bool IsTargetInSight()
@@ -50,9 +48,8 @@ public class GroundChaser : GroundMover
             lookingDirection = Vector3.left;
         }
 
-        if (searcherPosition.IsEnoughCloseTo(targetPosition, viewRadius))
+        if (searcherPosition.IsEnoughCloseTo(targetPosition, viewRadius) && (targetPosition.y > HeightChangeDetector.GroundHeight))
         {
-
             if (Vector3.Angle(lookingDirection, searcherPosition.DirectionTo(targetPosition)) < viewAngle / 2f)
             {
                 TargetDetected?.Invoke();
@@ -63,13 +60,5 @@ public class GroundChaser : GroundMover
         TargetLost?.Invoke();
 
         return false;
-    }
-    private bool IsFacingTarget(Vector2 targetPosition, Vector2 searcherPosition)
-    {
-        bool IsTargetOnTheRight;
-
-        IsTargetOnTheRight = targetPosition.x > searcherPosition.x;
-
-        return IsTargetOnTheRight == Rotator.IsFacingRight;
     }
 }

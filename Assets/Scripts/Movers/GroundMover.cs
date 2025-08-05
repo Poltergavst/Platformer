@@ -27,14 +27,30 @@ public abstract class GroundMover: Mover
     {
         Vector2 newPosition = Rigidbody.position + Rigidbody.position.DirectionTo(Destination) * Speed * Time.fixedDeltaTime;
 
-        if (IsOverTheEdge(newPosition) == false)
+        if (IsOverTheEdge(newPosition) == true)
         {
-            Rigidbody.MovePosition(newPosition);
+            newPosition = SetToNearestEdge(newPosition);
         }
+
+        Rigidbody.MovePosition(newPosition);
     }
 
-    protected bool IsOverTheEdge(Vector2 position)
+    public bool IsOverTheEdge(Vector2 position)
     {
         return position.x > RightEdge.x || position.x < LeftEdge.x;
+    }
+
+    public Vector2 SetToNearestEdge(Vector2 position)
+    {
+        if (position.SqrDistanceTo(RightEdge) < position.SqrDistanceTo(LeftEdge))
+        {
+            position = RightEdge;
+        }
+        else
+        {
+            position = LeftEdge;
+        }
+
+        return position;
     }
 }

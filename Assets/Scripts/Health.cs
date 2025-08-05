@@ -1,25 +1,27 @@
 using System;
 using UnityEngine;
 
-public class Health
+public class Health : MonoBehaviour
 {
+    [SerializeField] private int _maxHealth;
+
     private int _health;
-    private int _maxHealth;
     private int _minHealth;
 
     public event Action Expired;
 
-    public Health(int maxHealth)
+    private void Start()
     {
         _minHealth = 0;
-        _maxHealth = maxHealth;
 
         _health = _maxHealth;
     }
 
-    public void DecreaseHealth(int amount)
+    public void Decrease(int amount)
     {
         _health -= Mathf.Abs(amount);
+
+        Debug.Log($"HealthDecreased: {_health}");
 
         if (_health <= _minHealth) 
         { 
@@ -27,10 +29,17 @@ public class Health
         }
     }
 
-    public void IncreaseHealth(int amount)
+    public void Increase(int amount)
     {
         _health += Mathf.Abs(amount);
 
-        Mathf.Clamp(_health, _minHealth, _maxHealth);
+        _health = Mathf.Clamp(_health, _minHealth, _maxHealth);
+
+        Debug.Log($"HealthIncreased: {_health}");
+    }
+
+    public void Reset()
+    {
+        _health = _maxHealth;
     }
 }

@@ -28,6 +28,16 @@ public class PlayerMovement : Mover
         base.Awake();
     }
 
+    private void OnEnable()
+    {
+        _inputReader.enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        _inputReader.enabled = false;
+    }
+
     private void FixedUpdate()
     {
         _stepsSinceLastGrounded++;
@@ -66,13 +76,16 @@ public class PlayerMovement : Mover
     {
         _stepsSinceLastGrounded = 0;
 
-        if (_inputReader.Direction != 0)
+        if (_stepsSinceLastJump > 1) 
         {
-            Ran?.Invoke(PlayerAnimatorStates.PlayerRun);
-        }
-        else
-        {
-            Stopped?.Invoke(PlayerAnimatorStates.PlayerIdle);
+            if (_inputReader.Direction != 0)
+            {
+                Ran?.Invoke(PlayerAnimatorStates.PlayerRun);
+            }
+            else
+            {
+                Stopped?.Invoke(PlayerAnimatorStates.PlayerIdle);
+            }
         }
 
         if(_isJumping)

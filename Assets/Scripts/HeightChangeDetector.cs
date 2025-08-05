@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class HeightChangeDetector : MonoBehaviour
 {
-    [SerializeField] private LayerMask _countInDetection; 
+    [SerializeField] private LayerMask _countInDetection;
+
+    public float GroundHeight { get; set; }
 
     public Vector2 FindEdgeInDirection(Vector2 direction, GroundChecker groundChecker)
     {
-        float currentHeight;
         float step = 0.1f;
         float heightThreshold = 0.1f;
 
@@ -14,9 +15,9 @@ public class HeightChangeDetector : MonoBehaviour
 
         if (groundChecker.IsGround(out RaycastHit2D hit, edgePosition))
         {
-            currentHeight = hit.point.y;
+            GroundHeight = hit.point.y;
 
-            while (IsHeightUnchanged(heightThreshold, currentHeight, GetHeightInFront(edgePosition, direction)))
+            while (IsHeightUnchanged(heightThreshold, GroundHeight, GetHeightInFront(edgePosition, direction)))
             {
                 edgePosition += direction * step;
             }

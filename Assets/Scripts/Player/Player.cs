@@ -2,8 +2,8 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D), typeof(PlayerMovement), typeof(Knockbacker))]
-[RequireComponent(typeof(PlayerAnimationHandler))]
-public class Player : MonoBehaviour
+[RequireComponent(typeof(PlayerAnimationHandler), typeof(Health))]
+public class Player : MonoBehaviour, IDamagable
 {
     [SerializeField] private float _respawnDelay;
     [SerializeField] private Transform _spawnPoint;
@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
         _knockbacker = GetComponent<Knockbacker>();
         _animationHandler = GetComponent<PlayerAnimationHandler>();
 
-        _health = new Health(5);
+        _health = GetComponent<Health>(); ;
     }
 
     private void OnEnable()
@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
         Unsubscribe();
     }
 
-    public void TakeHit(Vector3 hitterPosition, bool isLethal)
+    public void TakeDamage(Vector3 hitterPosition, int damage, bool isLethal)
     {
         if (_isDead)
         {
@@ -54,6 +54,8 @@ public class Player : MonoBehaviour
         {
             Die();
         }
+
+        _health.Decrease(damage);
     }
 
     public void GetVerticalBoost()
@@ -102,6 +104,8 @@ public class Player : MonoBehaviour
         _collider.enabled = true;
 
         transform.position = _spawnPoint.position;
+
+        _health.Reset();
 
         StartMovement();
     }

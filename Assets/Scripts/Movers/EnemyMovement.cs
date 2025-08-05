@@ -3,12 +3,14 @@ using UnityEngine;
 [RequireComponent(typeof(GroundChaser), typeof(GroundPatroller))]
 public class EnemyMovement : MonoBehaviour
 {
-    GroundMover _movement;
-    GroundChaser _chaseMovement;
-    GroundPatroller _patrolMovement;
+    private GroundMover _movement;
+    private GroundChaser _chaseMovement;
+    private GroundPatroller _patrolMovement;
 
-    SpriteRenderer _spriteRenderer;
-    Color _baseColor;
+    private Rigidbody2D _rb;
+    private SpriteRenderer _spriteRenderer;
+
+    private Color _baseColor;
 
     private void OnEnable()
     {
@@ -28,6 +30,8 @@ public class EnemyMovement : MonoBehaviour
         _patrolMovement = GetComponent<GroundPatroller>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
+        _rb = gameObject.GetComponent<Rigidbody2D>();
+
         _baseColor = _spriteRenderer.color;
 
         _movement = _patrolMovement;
@@ -35,7 +39,29 @@ public class EnemyMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _movement.Move();
+        if (_movement.enabled == true)
+        {
+            _movement.Move();
+        }
+
+        if (_movement.IsOverTheEdge(transform.position))
+        {
+            _rb.velocity = Vector3.zero;
+        }
+    }
+
+    public void StopMovement()
+    {
+        _rb.velocity = Vector2.zero;
+        _movement.enabled = false;
+        _rb.isKinematic = false;
+    }
+
+    public void StartMovement()
+    {
+        _rb.velocity = Vector2.zero;
+        _movement.enabled = true;
+        _rb.isKinematic = true;
     }
 
     private void SwitchToPatrol()
