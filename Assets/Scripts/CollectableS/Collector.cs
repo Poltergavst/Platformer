@@ -6,7 +6,7 @@ public class Collector : MonoBehaviour
     {
         if (collision.TryGetComponent<ICollectable>(out ICollectable item))
         {
-            item.Collect();
+            item.Collect(this);
         }
     }
 }

@@ -19,11 +19,11 @@ public static class Vector2Extension
 
     public static Vector2 Change(this Vector2 vector, float? x = null, float? y = null)
     {
-        return new Vector3(x ?? vector.x, y ?? vector.y);
+        return new Vector2(x ?? vector.x, y ?? vector.y);
     }
 
     public static Vector2 Add(this Vector2 vector, float? x = null, float? y = null)
     {
-        return new Vector3(x: vector.x + (x ?? 0), y: vector.y + (y ?? 0));
+        return new Vector2(x: vector.x + (x ?? 0), y: vector.y + (y ?? 0));
     }
 }

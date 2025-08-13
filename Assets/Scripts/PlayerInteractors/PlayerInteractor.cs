@@ -5,17 +5,17 @@ public abstract class PlayerInteractor : MonoBehaviour
 {
     protected PlayerDetector PlayerDetector;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         PlayerDetector = GetComponent<PlayerDetector>();
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         PlayerDetector.PlayerDetected += InteractWithPlayer;
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         PlayerDetector.PlayerDetected -= InteractWithPlayer;
     }

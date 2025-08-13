@@ -2,21 +2,21 @@ using UnityEngine;
 
 public class Rotator: MonoBehaviour
 {
-    public void Turn(float position, float direction)
+    public bool IsFacingRight { get; private set; }
+
+    public void Turn(float positionX, float directionX)
     {
         int rotationValue;
         int rightTurnValue = 0;
         int leftTurnValue = 180;
 
-        bool isFacingRight;
-
         Quaternion initialRotation = transform.rotation;
 
-        if (direction != position)
+        if (directionX != positionX)
         {
-            isFacingRight = direction > position;
+            IsFacingRight = directionX > positionX;
 
-            rotationValue = isFacingRight ? rightTurnValue : leftTurnValue;
+            rotationValue = IsFacingRight ? rightTurnValue : leftTurnValue;
 
             transform.rotation = Quaternion.Euler(initialRotation.x, rotationValue, initialRotation.y);
         }

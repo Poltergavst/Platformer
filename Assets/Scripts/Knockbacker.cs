@@ -23,6 +23,8 @@ public class Knockbacker : MonoBehaviour
 
     public void GetKnockbacked(Vector3 senderPosition)
     {
+        Debug.Log("Im knockbacked");
+
         KnockbackStarted?.Invoke();
 
         if (_coroutine != null)

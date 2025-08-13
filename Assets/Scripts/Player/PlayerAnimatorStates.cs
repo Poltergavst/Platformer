@@ -7,4 +7,5 @@ public static class PlayerAnimatorStates
     public static readonly int PlayerIdle = Animator.StringToHash(nameof(PlayerIdle));
     public static readonly int PlayerJump = Animator.StringToHash(nameof(PlayerJump));
     public static readonly int PlayerFall = Animator.StringToHash(nameof(PlayerFall));
+    public static readonly int PlayerAttack = Animator.StringToHash(nameof(PlayerAttack));
 }
