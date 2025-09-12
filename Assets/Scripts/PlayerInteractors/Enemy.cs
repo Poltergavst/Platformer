@@ -10,6 +10,8 @@ public class Enemy : PlayerInteractor, IDamagable
     private Knockbacker _knockbacker;
     private EnemyMovement _movement;
 
+    private Vector3 _defaultPosition, _defaultScale;
+
     protected override void Awake()
     {
         base.Awake();
@@ -17,6 +19,9 @@ public class Enemy : PlayerInteractor, IDamagable
         _health = GetComponent<Health>();
         _knockbacker = GetComponent<Knockbacker>();
         _movement = GetComponent<EnemyMovement>();
+
+        _defaultScale = transform.localScale;
+        _defaultPosition = transform.position;
     }
 
     protected override void OnEnable()
@@ -43,11 +48,13 @@ public class Enemy : PlayerInteractor, IDamagable
     {
         if (IsContactFromAbove(player.transform.position))
         {
+            GetStomped();
+
             player.GetVerticalBoost();
         }
         else
         {
-            player.TakeDamage(transform.position, _damage, false);
+            player.TakeDamage(transform.position, _damage);
         }
     }
 
@@ -59,10 +66,21 @@ public class Enemy : PlayerInteractor, IDamagable
         return Mathf.Abs(deviationFromTop) < maxDeviation;
     }
 
-    public void TakeDamage(Vector3 hitterPosition, int damage, bool isLethal)
+    public void TakeDamage(Vector3 hitterPosition, int damage)
     {
         _knockbacker.GetKnockbacked(hitterPosition);
         _health.Decrease(damage);
+    }
+
+    public void GetStomped()
+    {
+        int damageFromStomp = 1;
+        float lessen = 0.3f * transform.localScale.y;
+
+        transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - lessen, transform.localScale.z);
+        //transform.position = transform.position.Change(y: transform.position.y);
+
+        _health.Decrease(damageFromStomp);
     }
 
     private void Die()
@@ -76,6 +94,9 @@ public class Enemy : PlayerInteractor, IDamagable
     private void Respawn()
     {
         gameObject.SetActive(true);
+
+        transform.position = new Vector3(transform.position.x, _defaultPosition.y, transform.position.z);
+        transform.localScale = _defaultScale;
 
         _health.Reset();
         _movement.StartMovement();

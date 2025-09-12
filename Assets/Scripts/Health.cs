@@ -17,6 +17,11 @@ public class Health : MonoBehaviour
         _health = _maxHealth;
     }
 
+    public int GetCurrent()
+    {
+        return _health;
+    }
+
     public void Decrease(int amount)
     {
         _health -= Mathf.Abs(amount);

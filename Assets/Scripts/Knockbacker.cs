@@ -23,8 +23,6 @@ public class Knockbacker : MonoBehaviour
 
     public void GetKnockbacked(Vector3 senderPosition)
     {
-        Debug.Log("Im knockbacked");
-
         KnockbackStarted?.Invoke();
 
         if (_coroutine != null)
@@ -42,7 +40,10 @@ public class Knockbacker : MonoBehaviour
 
     private void RestartCoroutine()
     {
-        _coroutine = StartCoroutine(ResetKnockback());
+        if(gameObject.activeInHierarchy)
+        {
+            _coroutine = StartCoroutine(ResetKnockback());
+        }
     }
     
     private IEnumerator ResetKnockback()

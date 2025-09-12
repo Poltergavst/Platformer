@@ -2,6 +2,7 @@ public class LethalInteractor : PlayerInteractor
 {
     protected override void InteractWithPlayer(Player player)
     {
-        player.TakeDamage(transform.position, 0, true);
+        player.TryGetComponent<Health>(out Health health);
+        player.TakeDamage(transform.position, health.GetCurrent());
     }
 }

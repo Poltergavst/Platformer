@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent (typeof(InputReader))]
@@ -5,41 +6,67 @@ public class Attacker : MonoBehaviour
 { 
     [SerializeField] private int _damage;
     [SerializeField] private float _attackRadius;
-    [SerializeField] private Transform _attackAreaOrigin;
+    [SerializeField] private float _attackCooldown;
 
+    private float _cooldownTimer = 0f;
+    private bool _isAttacking = false;
+    private bool _attackRequested = false;
+
+    private Weapon _weapon;
     private InputReader _inputReader;
-    private Collider2D[] _damagables;
+
+    public event Action<int, int> Attacked;
 
     private void Awake()
     {
         _inputReader = GetComponent<InputReader>();
-        _damagables = new Collider2D[5];
+        _weapon = GetComponent<Weapon>();
+    }
+
+    private void OnEnable()
+    {
+        _weapon.CollidedWithDamagable += Attack;
+    }
+
+    private void OnDisable()
+    {
+        _weapon.CollidedWithDamagable -= Attack;
+    }
+
+    private void Update()
+    {
+        if (_inputReader.IsAttackPressed())
+            _attackRequested = true;
     }
 
     private void FixedUpdate()
     {
-        if (_inputReader.IsAttackPressed())
+        if (_cooldownTimer > 0f)
         {
-            Debug.Log("Атакую");
-            Attack();
+            _cooldownTimer -= Time.fixedDeltaTime;
         }
+        else
+        {
+            if (_attackRequested)
+            {
+                _isAttacking = true;
+                _cooldownTimer = _attackCooldown;
+                Attacked?.Invoke(PlayerAnimatorStates.PlayerAttack, 1);
+            }
+            else
+            {
+                _isAttacking = false;
+            }
+        }
+
+        _attackRequested = false;
     }
 
-    private void Attack()
+    private void Attack(IDamagable enemy)
     {
-        Physics2D.OverlapCircleNonAlloc(_attackAreaOrigin.position, _attackRadius, _damagables);
-
-        foreach (Collider2D damagable in _damagables)
+        if (_isAttacking)
         {
-            if (damagable == null)
-            {
-                return;
-            }
-
-            if (damagable.gameObject.TryGetComponent<IDamagable>(out IDamagable enemy) && damagable != this.GetComponent<Collider2D>())
-            {
-                enemy.TakeDamage(transform.position, _damage, false);
-            }
+            enemy.TakeDamage(transform.position, _damage);
         }
     }
 }

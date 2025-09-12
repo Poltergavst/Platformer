@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent (typeof(Animator), typeof(SpriteRenderer))]
@@ -19,17 +20,17 @@ public class PlayerAnimationHandler : MonoBehaviour
     public void StopAnimations()
     {
         ResetFrame();
-        PlayState(PlayerAnimatorStates.Empty);
+        PlayState(PlayerAnimatorStates.Empty, 0);
     }
 
     public void ResumeAnimations()
     {
-        PlayState(PlayerAnimatorStates.PlayerIdle);
+        PlayState(PlayerAnimatorStates.PlayerIdle, 0);
     }
 
-    public void PlayState(int id)
+    public void PlayState(int id, int layer)
     {
-        _animator.Play(id);
+        _animator.Play(id, layer);
     }
 
     private void ResetFrame()

@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class Healthpack : MonoBehaviour, ICollectable
 {
-    public int HealAmount { get; private set; }
-
     public static event Action<Healthpack> Collected;
+
+    public int HealAmount { get; private set; }
 
     private void Awake()
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D), typeof(PlayerMovement), typeof(Knockbacker))]
-[RequireComponent(typeof(PlayerAnimationHandler), typeof(Health))]
+[RequireComponent(typeof(PlayerAnimationHandler), typeof(Attacker), typeof(Health))]
 public class Player : MonoBehaviour, IDamagable
 {
     [SerializeField] private float _respawnDelay;
@@ -13,6 +13,7 @@ public class Player : MonoBehaviour, IDamagable
     private PlayerMovement _movement;
     private Knockbacker _knockbacker;
     private PlayerAnimationHandler _animationHandler;
+    private Attacker _attacker;
 
     private Health _health;
 
@@ -27,6 +28,7 @@ public class Player : MonoBehaviour, IDamagable
         _movement = GetComponent<PlayerMovement>();
         _knockbacker = GetComponent<Knockbacker>();
         _animationHandler = GetComponent<PlayerAnimationHandler>();
+        _attacker = GetComponent<Attacker>();
 
         _health = GetComponent<Health>(); ;
     }
@@ -41,7 +43,7 @@ public class Player : MonoBehaviour, IDamagable
         Unsubscribe();
     }
 
-    public void TakeDamage(Vector3 hitterPosition, int damage, bool isLethal)
+    public void TakeDamage(Vector3 hitterPosition, int damage)
     {
         if (_isDead)
         {
@@ -49,11 +51,6 @@ public class Player : MonoBehaviour, IDamagable
         }
 
         _knockbacker.GetKnockbacked(hitterPosition);
-
-        if (isLethal)
-        {
-            Die();
-        }
 
         _health.Decrease(damage);
     }
@@ -121,6 +118,8 @@ public class Player : MonoBehaviour, IDamagable
         _movement.Stopped += _animationHandler.PlayState;
         _movement.Jumped += _animationHandler.PlayState;
         _movement.Fell += _animationHandler.PlayState;
+
+        _attacker.Attacked += _animationHandler.PlayState;
     }
 
     private void Unsubscribe()
@@ -134,5 +133,7 @@ public class Player : MonoBehaviour, IDamagable
         _movement.Stopped -= _animationHandler.PlayState;
         _movement.Jumped -= _animationHandler.PlayState;
         _movement.Fell -= _animationHandler.PlayState;
+
+        _attacker.Attacked -= _animationHandler.PlayState;
     }
 }
