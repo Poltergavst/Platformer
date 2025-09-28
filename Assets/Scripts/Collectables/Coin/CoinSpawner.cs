@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class CoinSpawner : CollectableSpawner<Coin>
 {
     private void OnEnable()

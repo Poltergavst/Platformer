@@ -1,4 +1,5 @@
 using UnityEngine;
+
 [RequireComponent(typeof(GroundChecker), typeof(HeightChangeDetector))]
 public abstract class GroundMover: Mover
 {

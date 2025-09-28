@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public abstract class CollectableSpawner<T> : MonoBehaviour where T: MonoBehaviour, ICollectable
 {
@@ -10,9 +9,9 @@ public abstract class CollectableSpawner<T> : MonoBehaviour where T: MonoBehavio
     [SerializeField] private int _activeAmount;
     [SerializeField] private float _secondsBeforeRespawn;
 
-    [SerializeField] private Transform _spawnpointsContainer;
     [SerializeField] private Vector2[] _spawnPositions;
     [SerializeField] private LayerMask _dontSpawnOnTop;
+    [SerializeField] private Transform _spawnpointsContainer;
 
     private T[] _items;
     private List<T> _unactiveItems;
@@ -33,6 +32,12 @@ public abstract class CollectableSpawner<T> : MonoBehaviour where T: MonoBehavio
         InitialSpawn();
     }
 
+    protected void Despawn(T item)
+    {
+        Deactivate(item);
+        StartCoroutine(Respawn());
+    }
+
     private void CreateItemsAtSpawnpoints()
     {
         int amountOfItems = _spawnPositions.Length;
@@ -48,6 +53,7 @@ public abstract class CollectableSpawner<T> : MonoBehaviour where T: MonoBehavio
             Deactivate(_items[i]);
         }
     }
+
     private T PickRandomItem()
     {
         int minValue = 0;
@@ -93,12 +99,6 @@ public abstract class CollectableSpawner<T> : MonoBehaviour where T: MonoBehavio
         StartCoroutine(Respawn());
     }
 
-    protected void Despawn(T item)
-    {
-        Deactivate(item);
-        StartCoroutine(Respawn());
-    }
-
     private IEnumerator Respawn()
     {
         WaitForSeconds respawnDelay = new WaitForSeconds(_secondsBeforeRespawn);
@@ -139,7 +139,6 @@ public abstract class CollectableSpawner<T> : MonoBehaviour where T: MonoBehavio
 
     private void OnDrawGizmos()
     {
-
         foreach (Vector2 spawnPosition in _spawnPositions)
         {
             Gizmos.DrawSphere(spawnPosition, 0.3f);

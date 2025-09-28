@@ -6,10 +6,12 @@ public class GroundChaser : GroundMover
     [SerializeField] private float _sightDistance;
     [SerializeField] private Transform _target;
 
-    public override void Move() => Chase();
+    private bool _isChasing = false;
 
-    public event Action TargetDetected;
     public event Action TargetLost;
+    public event Action TargetDetected;
+
+    public override void Move() => Chase();
 
     private void Chase()
     {
@@ -27,38 +29,69 @@ public class GroundChaser : GroundMover
 
     private void FixedUpdate()
     {
-        IsTargetInSight();
+        SearchForTarget();
     }
 
-    private bool IsTargetInSight()
+    private void SearchForTarget()
     {
         Vector3 targetPosition = _target.position;
+
+        if (IsTargetAboveGround(targetPosition) && IsTargetWithinEdges(targetPosition) && IsTargetInSight(targetPosition))
+        {
+            if (_isChasing == false)
+                TargetDetected?.Invoke();
+
+            _isChasing = true;
+
+            return;
+        }
+
+        if (_isChasing)
+            TargetLost?.Invoke();
+
+        _isChasing = false;
+    }
+
+    private bool IsTargetInSight(Vector3 targetPosition)
+    {
         Vector3 searcherPosition = transform.position;
+
         Vector3 lookingDirection;
 
+        float half = 0.5f;
         float viewRadius = 3f;
+        float lookingAngle = 60f;
+        float searchingAngle = 160f;
+
         float viewAngle = 180f;
 
-        if(Rotator.IsFacingRight)
-        {
-            lookingDirection = Vector3.right;
-        }
-        else
-        {
-            lookingDirection = Vector3.left;
-        }
+        viewAngle = _isChasing ? searchingAngle : lookingAngle;
 
-        if (searcherPosition.IsEnoughCloseTo(targetPosition, viewRadius) && (targetPosition.y > HeightChangeDetector.GroundHeight))
+        lookingDirection = Rotator.IsFacingRight ? Vector3.right : Vector3.left;
+
+        if (searcherPosition.IsEnoughCloseTo(targetPosition, viewRadius))
         {
-            if (Vector3.Angle(lookingDirection, searcherPosition.DirectionTo(targetPosition)) < viewAngle / 2f)
+            if (Vector3.Angle(lookingDirection, searcherPosition.DirectionTo(targetPosition)) < viewAngle * half)
             {
-                TargetDetected?.Invoke();
                 return true;
             }
         }
 
-        TargetLost?.Invoke();
-
         return false;
+    }
+
+    private bool IsTargetWithinEdges(Vector3 targetPosition)
+    {
+        float offset = 1f;
+        
+        float rightEdge = RightEdge.x + offset;
+        float leftEdge = LeftEdge.x - offset;
+
+        return _target.position.x > leftEdge && targetPosition.x < rightEdge;
+    }
+
+    private bool IsTargetAboveGround(Vector3 targetPosition)
+    {
+        return targetPosition.y > HeightChangeDetector.GroundHeight;
     }
 }

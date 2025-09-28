@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(GroundChecker))]
+[RequireComponent(typeof(GroundChecker), typeof(InputReader))]
 public class PlayerMovement : Mover
 {
     [SerializeField] private float _jumpForce;
@@ -15,10 +15,10 @@ public class PlayerMovement : Mover
     private int _stepsSinceLastJump;
     private int _stepsSinceLastGrounded;
 
-    public event Action<int> Ran;
-    public event Action<int> Stopped;
-    public event Action<int> Jumped;
-    public event Action<int> Fell;
+    public event Action<int, int> Ran;
+    public event Action<int, int> Stopped;
+    public event Action<int, int> Jumped;
+    public event Action<int, int> Fell;
 
     protected override void Awake()
     {
@@ -40,8 +40,8 @@ public class PlayerMovement : Mover
 
     private void FixedUpdate()
     {
-        _stepsSinceLastGrounded++;
         _stepsSinceLastJump++;
+        _stepsSinceLastGrounded++;
 
         Move();
 
@@ -61,7 +61,7 @@ public class PlayerMovement : Mover
 
     public void Jump()
     {
-        Jumped?.Invoke(PlayerAnimatorStates.PlayerJump);
+        Jumped?.Invoke(PlayerAnimatorStates.PlayerJump, 0);
 
         _stepsSinceLastJump = 0;
         Rigidbody.velocity = Rigidbody.velocity.Change(y: _jumpForce);
@@ -80,11 +80,11 @@ public class PlayerMovement : Mover
         {
             if (_inputReader.Direction != 0)
             {
-                Ran?.Invoke(PlayerAnimatorStates.PlayerRun);
+                Ran?.Invoke(PlayerAnimatorStates.PlayerRun, 0);
             }
             else
             {
-                Stopped?.Invoke(PlayerAnimatorStates.PlayerIdle);
+                Stopped?.Invoke(PlayerAnimatorStates.PlayerIdle, 0);
             }
         }
 
@@ -106,7 +106,7 @@ public class PlayerMovement : Mover
     {
         if (Rigidbody.velocity.y < 0)
         {
-            Fell?.Invoke(PlayerAnimatorStates.PlayerFall);
+            Fell?.Invoke(PlayerAnimatorStates.PlayerFall, 0);
 
             Rigidbody.velocity += (_fallGravityMultiplier - 1) * Time.fixedDeltaTime * Physics2D.gravity * Vector2.up;
         }

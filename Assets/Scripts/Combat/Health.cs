@@ -13,8 +13,12 @@ public class Health : MonoBehaviour
     private void Start()
     {
         _minHealth = 0;
-
         _health = _maxHealth;
+    }
+
+    public int GetCurrent()
+    {
+        return _health;
     }
 
     public void Decrease(int amount)
