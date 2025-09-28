@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 [RequireComponent(typeof(Health), typeof(Knockbacker), typeof(EnemyMovement))]
 public class Enemy : PlayerInteractor, IDamagable
 {
