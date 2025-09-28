@@ -77,11 +77,29 @@ public class Enemy : PlayerInteractor, IDamagable
         int damageFromStomp = 1;
         float lessen = 0.3f * transform.localScale.y;
 
+        Collider2D collider = GetComponent<Collider2D>();
+
         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y - lessen, transform.localScale.z);
-        //transform.position = transform.position.Change(y: transform.position.y);
+
+        float delta = lessen / 2;
+
+        transform.position = transform.position.Change(y: transform.position.y - delta);
 
         _health.Decrease(damageFromStomp);
     }
+
+    //private System.Collections.IEnumerator AdjustPositionNextPhysicsFrame(float oldBottom)
+    //{
+    //    yield return new WaitForSeconds(1);
+
+    //    Collider2D collider = GetComponent<Collider2D>();
+    //    float newBottom = collider.bounds.min.y;
+    //    float delta = newBottom - oldBottom;
+
+    //    Debug.Log($"Woww: {oldBottom}, {newBottom}, {delta}");
+
+    //    transform.position = transform.position.Change(y: transform.position.y - delta);
+    //}
 
     private void Die()
     {

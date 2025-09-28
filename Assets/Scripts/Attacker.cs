@@ -9,6 +9,8 @@ public class Attacker : MonoBehaviour
     [SerializeField] private float _attackCooldown;
 
     private float _cooldownTimer = 0f;
+    private int _hitLimit = 1;
+    private int hits = 0;
     private bool _isAttacking = false;
     private bool _attackRequested = false;
 
@@ -51,6 +53,7 @@ public class Attacker : MonoBehaviour
             {
                 _isAttacking = true;
                 _cooldownTimer = _attackCooldown;
+                hits = _hitLimit;
                 Attacked?.Invoke(PlayerAnimatorStates.PlayerAttack, 1);
             }
             else
@@ -64,8 +67,9 @@ public class Attacker : MonoBehaviour
 
     private void Attack(IDamagable enemy)
     {
-        if (_isAttacking)
+        if (_isAttacking && hits > 0)
         {
+            hits -= 1;
             enemy.TakeDamage(transform.position, _damage);
         }
     }
