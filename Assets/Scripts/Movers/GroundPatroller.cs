@@ -35,7 +35,7 @@ public class GroundPatroller : GroundMover
     {
         float minDistance = 0.2f;
 
-        return Mathf.Abs(Destination.x - transform.position.x) < minDistance; //Rigidbody.position.IsEnoughCloseTo(Destination, 0.3f);
+        return Mathf.Abs(Destination.x - transform.position.x) < minDistance;
     }
 
     private Vector2 GetNextDestination()

@@ -29,7 +29,6 @@ public class InputReader : MonoBehaviour
     public bool IsJumpPressed() => GetBoolAsTrigger(ref _isJump);
     public bool IsAttackPressed() => GetBoolAsTrigger(ref _isAttack);
 
-
     private bool GetBoolAsTrigger(ref bool value)
     {
         bool localValue = value;

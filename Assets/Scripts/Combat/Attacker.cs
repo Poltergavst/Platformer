@@ -1,16 +1,16 @@
 using System;
 using UnityEngine;
 
-[RequireComponent (typeof(InputReader))]
+[RequireComponent (typeof(InputReader), typeof(Weapon))]
 public class Attacker : MonoBehaviour
 { 
     [SerializeField] private int _damage;
     [SerializeField] private float _attackRadius;
     [SerializeField] private float _attackCooldown;
 
-    private float _cooldownTimer = 0f;
-    private int _hitLimit = 1;
     private int hits = 0;
+    private int _hitLimit = 1;
+    private float _cooldownTimer = 0f;
     private bool _isAttacking = false;
     private bool _attackRequested = false;
 
@@ -21,8 +21,8 @@ public class Attacker : MonoBehaviour
 
     private void Awake()
     {
-        _inputReader = GetComponent<InputReader>();
         _weapon = GetComponent<Weapon>();
+        _inputReader = GetComponent<InputReader>();
     }
 
     private void OnEnable()

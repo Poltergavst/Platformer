@@ -13,7 +13,6 @@ public class Health : MonoBehaviour
     private void Start()
     {
         _minHealth = 0;
-
         _health = _maxHealth;
     }
 

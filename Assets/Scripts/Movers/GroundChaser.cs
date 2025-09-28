@@ -8,10 +8,10 @@ public class GroundChaser : GroundMover
 
     private bool _isChasing = false;
 
-    public override void Move() => Chase();
-
     public event Action TargetLost;
     public event Action TargetDetected;
+
+    public override void Move() => Chase();
 
     private void Chase()
     {
@@ -58,6 +58,7 @@ public class GroundChaser : GroundMover
 
         Vector3 lookingDirection;
 
+        float half = 0.5f;
         float viewRadius = 3f;
         float lookingAngle = 60f;
         float searchingAngle = 160f;
@@ -70,7 +71,7 @@ public class GroundChaser : GroundMover
 
         if (searcherPosition.IsEnoughCloseTo(targetPosition, viewRadius))
         {
-            if (Vector3.Angle(lookingDirection, searcherPosition.DirectionTo(targetPosition)) < viewAngle / 2f)
+            if (Vector3.Angle(lookingDirection, searcherPosition.DirectionTo(targetPosition)) < viewAngle * half)
             {
                 return true;
             }
@@ -82,8 +83,11 @@ public class GroundChaser : GroundMover
     private bool IsTargetWithinEdges(Vector3 targetPosition)
     {
         float offset = 1f;
+        
+        float rightEdge = RightEdge.x + offset;
+        float leftEdge = LeftEdge.x - offset;
 
-        return targetPosition.x < RightEdge.x + offset && _target.position.x > LeftEdge.x - offset;
+        return _target.position.x > leftEdge && targetPosition.x < rightEdge;
     }
 
     private bool IsTargetAboveGround(Vector3 targetPosition)

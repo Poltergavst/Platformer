@@ -9,6 +9,16 @@ public class EnemyMovement : MonoBehaviour
 
     private Rigidbody2D _rb;
 
+    private void Awake()
+    {
+        _chaseMovement = GetComponent<GroundChaser>();
+        _patrolMovement = GetComponent<GroundPatroller>();
+
+        _rb = gameObject.GetComponent<Rigidbody2D>();
+
+        _movement = _patrolMovement;
+    }
+
     private void OnEnable()
     {
         _chaseMovement.TargetDetected += SwitchToChase;
@@ -19,16 +29,6 @@ public class EnemyMovement : MonoBehaviour
     {
         _chaseMovement.TargetDetected -= SwitchToChase;
         _chaseMovement.TargetDetected -= SwitchToPatrol;
-    }
-
-    private void Awake()
-    {
-        _chaseMovement = GetComponent<GroundChaser>();
-        _patrolMovement = GetComponent<GroundPatroller>();
-
-        _rb = gameObject.GetComponent<Rigidbody2D>();
-
-        _movement = _patrolMovement;
     }
 
     private void FixedUpdate()
