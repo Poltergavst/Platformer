@@ -50,7 +50,7 @@ public class Player : MonoBehaviour, IDamagable
             return;
         }
 
-        _knockbacker.GetKnockbacked(hitterPosition);
+        _knockbacker.TakeKnockback(hitterPosition);
 
         _health.Decrease(damage);
     }

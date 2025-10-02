@@ -67,7 +67,7 @@ public class Enemy : PlayerInteractor, IDamagable
 
     public void TakeDamage(Vector3 hitterPosition, int damage)
     {
-        _knockbacker.GetKnockbacked(hitterPosition);
+        _knockbacker.TakeKnockback(hitterPosition);
         _health.Decrease(damage);
     }
 

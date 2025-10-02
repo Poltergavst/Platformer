@@ -21,7 +21,7 @@ public class Knockbacker : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    public void GetKnockbacked(Vector3 senderPosition)
+    public void TakeKnockback(Vector3 senderPosition)
     {
         KnockbackStarted?.Invoke();
 
