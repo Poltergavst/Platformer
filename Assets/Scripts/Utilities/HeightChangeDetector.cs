@@ -4,7 +4,7 @@ public class HeightChangeDetector : MonoBehaviour
 {
     [SerializeField] private LayerMask _countInDetection;
 
-    public float GroundHeight { get; set; }
+    public float GroundHeight { get; private set; }
 
     public Vector2 FindEdgeInDirection(Vector2 direction, GroundChecker groundChecker)
     {

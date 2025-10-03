@@ -86,10 +86,12 @@ public class Enemy : PlayerInteractor, IDamagable
 
     private void Die()
     {
+        float respawnDelay = 3f;
+
         _movement.StopMovement();
         gameObject.SetActive(false);
 
-        Invoke(nameof(Respawn), 3);
+        InitiateRespawn(respawnDelay);
     }
 
     private void Respawn()
@@ -101,5 +103,14 @@ public class Enemy : PlayerInteractor, IDamagable
 
         _health.Reset();
         _movement.StartMovement();
+    }
+
+    private void IEnumerator InitiateRespawn(float delay)
+    {
+        WaitForSeconds waitRespawn = new WaitForSeconds(dealy);
+
+        yield return wait;
+
+        Respawn();
     }
 }

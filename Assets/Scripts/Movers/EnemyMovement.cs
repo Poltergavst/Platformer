@@ -7,14 +7,14 @@ public class EnemyMovement : MonoBehaviour
     private GroundChaser _chaseMovement;
     private GroundPatroller _patrolMovement;
 
-    private Rigidbody2D _rb;
+    private Rigidbody2D _rigidbody;
 
     private void Awake()
     {
         _chaseMovement = GetComponent<GroundChaser>();
         _patrolMovement = GetComponent<GroundPatroller>();
 
-        _rb = gameObject.GetComponent<Rigidbody2D>();
+        _rigidbody = gameObject.GetComponent<Rigidbody2D>();
 
         _movement = _patrolMovement;
     }
@@ -40,22 +40,22 @@ public class EnemyMovement : MonoBehaviour
 
         if (_movement.IsOverTheEdge(transform.position))
         {
-            _rb.velocity = Vector3.zero;
+            _rigidbody.velocity = Vector3.zero;
         }
     }
 
     public void StopMovement()
     {
-        _rb.velocity = Vector2.zero;
+        _rigidbody.velocity = Vector2.zero;
         _movement.enabled = false;
-        _rb.isKinematic = false;
+        _rigidbody.isKinematic = false;
     }
 
     public void StartMovement()
     {
-        _rb.velocity = Vector2.zero;
+        _rigidbody.velocity = Vector2.zero;
         _movement.enabled = true;
-        _rb.isKinematic = true;
+        _rigidbody.isKinematic = true;
     }
 
     private void SwitchToPatrol()
