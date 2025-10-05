@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Health), typeof(Knockbacker), typeof(EnemyMovement))]
@@ -91,7 +92,8 @@ public class Enemy : PlayerInteractor, IDamagable
         _movement.StopMovement();
         gameObject.SetActive(false);
 
-        InitiateRespawn(respawnDelay);
+
+        CoroutineRunnerForInactives.Instance.StartCoroutine(InitiateRespawn(respawnDelay));
     }
 
     private void Respawn()
@@ -105,11 +107,11 @@ public class Enemy : PlayerInteractor, IDamagable
         _movement.StartMovement();
     }
 
-    private void IEnumerator InitiateRespawn(float delay)
+    private IEnumerator InitiateRespawn(float delay)
     {
-        WaitForSeconds waitRespawn = new WaitForSeconds(dealy);
+        WaitForSeconds waitRespawn = new WaitForSeconds(delay);
 
-        yield return wait;
+        yield return waitRespawn;
 
         Respawn();
     }

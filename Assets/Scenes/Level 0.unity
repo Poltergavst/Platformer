@@ -1729,7 +1729,6 @@ MonoBehaviour:
   _prefab: {fileID: 412268356958779447, guid: c14c981b5cbb1ec40a7321f0f51cfcf3, type: 3}
   _activeAmount: 13
   _secondsBeforeRespawn: 25
-  _spawnpointsContainer: {fileID: 879176980}
   _spawnPositions:
   - {x: 1.7329602, y: 0.76402116}
   - {x: 9.1, y: 2.35}
@@ -1759,6 +1758,7 @@ MonoBehaviour:
   _dontSpawnOnTop:
     serializedVersion: 2
     m_Bits: 384
+  _spawnpointsContainer: {fileID: 879176980}
 --- !u!1 &1374802739
 GameObject:
   m_ObjectHideFlags: 0
@@ -2061,7 +2061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8078bf3c268ef04cbc20cdfb8ae7ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 5
+  _max: 0
 --- !u!114 &1374802756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2615,7 +2615,6 @@ MonoBehaviour:
   _prefab: {fileID: 8458317024837611465, guid: cc84f8d51f76b864390926db7559efc5, type: 3}
   _activeAmount: 4
   _secondsBeforeRespawn: 25
-  _spawnpointsContainer: {fileID: 201716672}
   _spawnPositions:
   - {x: -18.98, y: -0.67899823}
   - {x: -21.447021, y: -1.9889979}
@@ -2630,6 +2629,7 @@ MonoBehaviour:
   _dontSpawnOnTop:
     serializedVersion: 2
     m_Bits: 384
+  _spawnpointsContainer: {fileID: 201716672}
 --- !u!1 &1675835447
 GameObject:
   m_ObjectHideFlags: 0
@@ -7916,7 +7916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8078bf3c268ef04cbc20cdfb8ae7ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 3
+  _max: 3
 --- !u!114 &8354002473032280489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8007,7 +8007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8078bf3c268ef04cbc20cdfb8ae7ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 3
+  _max: 3
 --- !u!114 &8354002473388170009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8098,7 +8098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8078bf3c268ef04cbc20cdfb8ae7ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 3
+  _max: 3
 --- !u!4 &8671621158080435115
 Transform:
   m_ObjectHideFlags: 0
@@ -8249,7 +8249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8078bf3c268ef04cbc20cdfb8ae7ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 3
+  _max: 3
 --- !u!212 &8947678567397760870
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8915,7 +8915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8078bf3c268ef04cbc20cdfb8ae7ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 3
+  _max: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
