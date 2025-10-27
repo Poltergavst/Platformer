@@ -12,17 +12,14 @@ public class Attacker : MonoBehaviour
     private int _hitLimit = 1;
     private float _cooldownTimer = 0f;
     private bool _isAttacking = false;
-    private bool _attackRequested = false;
 
     private Weapon _weapon;
-    private InputReader _inputReader;
 
     public event Action<int, int> Attacked;
 
     private void Awake()
     {
         _weapon = GetComponent<Weapon>();
-        _inputReader = GetComponent<InputReader>();
     }
 
     private void OnEnable()
@@ -35,12 +32,6 @@ public class Attacker : MonoBehaviour
         _weapon.CollidedWithDamagable -= Attack;
     }
 
-    private void Update()
-    {
-        if (_inputReader.IsAttackPressed())
-            _attackRequested = true;
-    }
-
     private void FixedUpdate()
     {
         if (_cooldownTimer > 0f)
@@ -49,20 +40,19 @@ public class Attacker : MonoBehaviour
         }
         else
         {
-            if (_attackRequested)
-            {
-                _isAttacking = true;
-                _cooldownTimer = _attackCooldown;
-                hits = _hitLimit;
-                Attacked?.Invoke(PlayerAnimatorStates.PlayerAttack, 1);
-            }
-            else
-            {
-                _isAttacking = false;
-            }
+            _isAttacking = false;
         }
+    }
 
-        _attackRequested = false;
+    public void InitiateAttack()
+    {
+        if (_cooldownTimer <= 0f && _isAttacking == false)
+        {
+            _isAttacking = true;
+            _cooldownTimer = _attackCooldown;
+            hits = _hitLimit;
+            Attacked?.Invoke(PlayerAnimatorStates.PlayerAttack, 1);
+        }
     }
 
     private void Attack(IDamagable enemy)

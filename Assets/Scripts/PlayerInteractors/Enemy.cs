@@ -1,14 +1,14 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Health), typeof(Knockbacker), typeof(EnemyMovement))]
+[RequireComponent(typeof(Health), typeof(Knockbacker), typeof(EnemyMover))]
 public class Enemy : PlayerInteractor, IDamagable
 {
     [SerializeField] private int _damage;
 
     private Health _health;
     private Knockbacker _knockbacker;
-    private EnemyMovement _movement;
+    private EnemyMover _movement;
 
     private Vector3 _defaultPosition, _defaultScale;
 
@@ -18,7 +18,7 @@ public class Enemy : PlayerInteractor, IDamagable
 
         _health = GetComponent<Health>();
         _knockbacker = GetComponent<Knockbacker>();
-        _movement = GetComponent<EnemyMovement>();
+        _movement = GetComponent<EnemyMover>();
 
         _defaultScale = transform.localScale;
         _defaultPosition = transform.position;
@@ -93,7 +93,7 @@ public class Enemy : PlayerInteractor, IDamagable
         gameObject.SetActive(false);
 
 
-        CoroutineRunnerForInactives.Instance.StartCoroutine(InitiateRespawn(respawnDelay));
+        CoroutineRunner.Instance.StartCoroutine(InitiateRespawn(respawnDelay));
     }
 
     private void Respawn()

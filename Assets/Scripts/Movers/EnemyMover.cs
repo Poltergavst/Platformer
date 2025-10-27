@@ -1,8 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(GroundChaser), typeof(GroundPatroller))]
-public class EnemyMovement : MonoBehaviour
+[RequireComponent(typeof(GroundChaser), typeof(GroundPatroller), typeof(TargetSearcher))]
+public class EnemyMover : MonoBehaviour
 {
+    TargetSearcher _targetSearcher;
+
     private GroundMover _movement;
     private GroundChaser _chaseMovement;
     private GroundPatroller _patrolMovement;
@@ -11,6 +13,8 @@ public class EnemyMovement : MonoBehaviour
 
     private void Awake()
     {
+        _targetSearcher = GetComponent<TargetSearcher>();
+
         _chaseMovement = GetComponent<GroundChaser>();
         _patrolMovement = GetComponent<GroundPatroller>();
 
@@ -21,14 +25,14 @@ public class EnemyMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        _chaseMovement.TargetDetected += SwitchToChase;
-        _chaseMovement.TargetLost += SwitchToPatrol; 
+        _targetSearcher.TargetDetected += SwitchToChase;
+        _targetSearcher.TargetLost += SwitchToPatrol; 
     }
 
     private void OnDisable()
     {
-        _chaseMovement.TargetDetected -= SwitchToChase;
-        _chaseMovement.TargetDetected -= SwitchToPatrol;
+        _targetSearcher.TargetDetected -= SwitchToChase;
+        _targetSearcher.TargetLost -= SwitchToPatrol;
     }
 
     private void FixedUpdate()

@@ -17,7 +17,7 @@ public class PlayerDetector : MonoBehaviour
 
     private void TryDetectPlayer(GameObject collidedObject)
     {
-        if (collidedObject.TryGetComponent<Player>(out Player player))
+        if (collidedObject.TryGetComponent(out Player player))
         {
             PlayerDetected?.Invoke(player);
         }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(GroundChecker), typeof(InputReader))]
-public class PlayerMovement : Mover
+public class PlayerMover : Mover
 {
     [SerializeField] private float _jumpForce;
     [SerializeField] private float _fallGravityMultiplier;

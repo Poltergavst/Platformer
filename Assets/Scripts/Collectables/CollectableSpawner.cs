@@ -35,7 +35,7 @@ public abstract class CollectableSpawner<T> : MonoBehaviour where T: MonoBehavio
     protected void Despawn(T item)
     {
         Deactivate(item);
-        StartCoroutine(Respawn());
+        CoroutineRunner.Instance.StartCoroutine(Respawn());
     }
 
     private void CreateItemsAtSpawnpoints()
@@ -96,7 +96,7 @@ public abstract class CollectableSpawner<T> : MonoBehaviour where T: MonoBehavio
             }
         }
 
-        StartCoroutine(Respawn());
+        CoroutineRunner.Instance.StartCoroutine(Respawn());
     }
 
     private IEnumerator Respawn()

@@ -1,8 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D), typeof(PlayerMovement), typeof(Knockbacker))]
+[RequireComponent(typeof(Collider2D), typeof(PlayerMover), typeof(Knockbacker))]
 [RequireComponent(typeof(PlayerAnimationHandler), typeof(Attacker), typeof(Health))]
+[RequireComponent(typeof(InputReader))]
 public class Player : MonoBehaviour, IDamagable
 {
     [SerializeField] private float _respawnDelay;
@@ -10,7 +11,8 @@ public class Player : MonoBehaviour, IDamagable
 
     private Collider2D _collider;
 
-    private PlayerMovement _movement;
+    private InputReader _inputReader;
+    private PlayerMover _movement;
     private Knockbacker _knockbacker;
     private PlayerAnimationHandler _animationHandler;
     private Attacker _attacker;
@@ -25,7 +27,8 @@ public class Player : MonoBehaviour, IDamagable
 
         _collider = GetComponent<Collider2D>();
 
-        _movement = GetComponent<PlayerMovement>();
+        _inputReader = GetComponent<InputReader>();
+        _movement = GetComponent<PlayerMover>();
         _knockbacker = GetComponent<Knockbacker>();
         _animationHandler = GetComponent<PlayerAnimationHandler>();
         _attacker = GetComponent<Attacker>();
@@ -41,6 +44,14 @@ public class Player : MonoBehaviour, IDamagable
     private void OnDisable()
     {
         Unsubscribe();
+    }
+
+    private void FixedUpdate()
+    {
+        if (_inputReader.IsAttackPressed())
+        {
+            _attacker.InitiateAttack();
+        }
     }
 
     public void TakeDamage(Vector3 hitterPosition, int damage)
@@ -88,7 +99,7 @@ public class Player : MonoBehaviour, IDamagable
 
     private void StartRespawn()
     {
-        StartCoroutine(Respawn());
+        CoroutineRunner.Instance.StartCoroutine(Respawn());
     }
 
     private IEnumerator Respawn()

@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Health : MonoBehaviour
@@ -19,7 +20,10 @@ public class Health : MonoBehaviour
 
     public void Decrease(int amount)
     {
-        Current -= Mathf.Abs(amount);
+        if (amount < 0)
+            return;
+
+        ChangeCurrent(-amount);
 
         if (Current <= _min) 
         { 
@@ -29,7 +33,17 @@ public class Health : MonoBehaviour
 
     public void Increase(int amount)
     {
-        Current += Mathf.Abs(amount);
+        if (amount < 0)
+            return;
+
+        ChangeCurrent(amount);
+    }
+
+    private void ChangeCurrent(int amount)
+    {
+        Current += amount;
+
+        Debug.Log(Current);
 
         Current = Mathf.Clamp(Current, _min, _max);
     }

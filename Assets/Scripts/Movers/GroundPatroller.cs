@@ -3,18 +3,15 @@ using UnityEngine;
 [RequireComponent(typeof(HeightChangeDetector))]
 public class GroundPatroller : GroundMover
 {
-    private Vector2 _leftWaypoint, _rightWaypoint;
+    private Vector2[] _edgeWaypoints;
 
     protected override void Start()
     {
-        float offset = 0.1f;
-
         base.Start();
 
         Destination = transform.position;
 
-        _leftWaypoint = RightEdge + Vector2.left * offset;
-        _rightWaypoint = LeftEdge + Vector2.right * offset;
+        _edgeWaypoints = new Vector2[] { RightEdge, LeftEdge};
     }
 
     public override void Move() => Patrol();
@@ -40,6 +37,8 @@ public class GroundPatroller : GroundMover
 
     private Vector2 GetNextDestination()
     {
-        return Destination == _leftWaypoint ? _rightWaypoint : _leftWaypoint;
+        int index = 0;
+
+        return Destination == _edgeWaypoints[index] ? _edgeWaypoints[++index] : _edgeWaypoints[index];
     }
 }

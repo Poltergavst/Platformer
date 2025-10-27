@@ -27,7 +27,7 @@ public class Knockbacker : MonoBehaviour
 
         if (_coroutine != null)
         {
-            StopCoroutine(_coroutine);
+            CoroutineRunner.Instance.StopCoroutine(_coroutine);
         }
 
         _rigidbody.velocity = Vector3.zero;
@@ -42,7 +42,7 @@ public class Knockbacker : MonoBehaviour
     {
         if(gameObject.activeInHierarchy)
         {
-            _coroutine = StartCoroutine(ResetKnockback());
+            _coroutine = CoroutineRunner.Instance.StartCoroutine(ResetKnockback());
         }
     }
     

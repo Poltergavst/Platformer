@@ -14,7 +14,7 @@ public class Healthpack : MonoBehaviour, ICollectable
 
     public void Collect(Collector collector)
     {
-        collector.gameObject.TryGetComponent<Health>(out Health health);
+        collector.gameObject.TryGetComponent(out Health health);
 
         health.Increase(HealAmount);
 
