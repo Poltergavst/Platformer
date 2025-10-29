@@ -3,12 +3,13 @@ using UnityEngine;
 [RequireComponent(typeof(GroundChecker), typeof(HeightChangeDetector))]
 public abstract class GroundMover: Mover
 {
-    protected Vector2 Destination;
     protected GroundChecker GroundChecker;
     protected HeightChangeDetector HeightChangeDetector;
 
-    protected Vector2 LeftEdge;
-    protected Vector2 RightEdge;
+    protected Vector2 Destination;
+
+    public Vector2 LeftEdge { get; private set; }
+    public Vector2 RightEdge { get; private set; }
 
     protected override void Awake()
     {

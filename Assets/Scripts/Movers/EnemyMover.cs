@@ -3,40 +3,49 @@ using UnityEngine;
 [RequireComponent(typeof(GroundChaser), typeof(GroundPatroller), typeof(TargetSearcher))]
 public class EnemyMover : MonoBehaviour
 {
-    TargetSearcher _targetSearcher;
+    private Rigidbody2D _rigidbody;
 
     private GroundMover _movement;
     private GroundChaser _chaseMovement;
     private GroundPatroller _patrolMovement;
 
-    private Rigidbody2D _rigidbody;
+    private TargetSearcher _targetSearcher;
 
     private void Awake()
     {
-        _targetSearcher = GetComponent<TargetSearcher>();
+        _rigidbody = GetComponent<Rigidbody2D>();
 
         _chaseMovement = GetComponent<GroundChaser>();
         _patrolMovement = GetComponent<GroundPatroller>();
 
-        _rigidbody = gameObject.GetComponent<Rigidbody2D>();
+        _targetSearcher = GetComponent<TargetSearcher>();
 
         _movement = _patrolMovement;
     }
 
     private void OnEnable()
     {
-        _targetSearcher.TargetDetected += SwitchToChase;
         _targetSearcher.TargetLost += SwitchToPatrol; 
+        _targetSearcher.TargetDetected += SwitchToChase;
     }
 
     private void OnDisable()
     {
-        _targetSearcher.TargetDetected -= SwitchToChase;
         _targetSearcher.TargetLost -= SwitchToPatrol;
+        _targetSearcher.TargetDetected -= SwitchToChase;
+    }
+
+    private void Start()
+    {
+        float offset = 0.5f;
+
+        _targetSearcher.InitializeSearchArea(_movement.LeftEdge.x - offset, _movement.RightEdge.x + offset, _movement.LeftEdge.y - offset);
     }
 
     private void FixedUpdate()
     {
+        _targetSearcher.SearchForTarget(_movement.GetDirection());
+
         if (_movement.enabled == true)
         {
             _movement.Move();
@@ -69,6 +78,8 @@ public class EnemyMover : MonoBehaviour
 
     private void SwitchToChase()
     {
+        _chaseMovement.SetOnTarget(_targetSearcher.Target.position);
+
         _movement = _chaseMovement;
     }
 }

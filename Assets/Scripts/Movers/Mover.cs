@@ -16,4 +16,9 @@ public abstract class Mover : MonoBehaviour
     }
 
     public abstract void Move();
+
+    public Vector2 GetDirection()
+    {
+        return Rotator.IsFacingRight ? Vector2.right : Vector2.left;
+    }
 }

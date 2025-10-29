@@ -10,7 +10,9 @@ public class Attacker : MonoBehaviour
 
     private int hits = 0;
     private int _hitLimit = 1;
+
     private float _cooldownTimer = 0f;
+
     private bool _isAttacking = false;
 
     private Weapon _weapon;

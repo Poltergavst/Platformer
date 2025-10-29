@@ -6,14 +6,23 @@ public class TargetSearcher : MonoBehaviour
     [SerializeField] private float _sightDistance;
     [SerializeField] private Transform _target;
 
+    public Transform Target => _target;
+
     public event Action TargetLost;
     public event Action TargetDetected;
 
-    public void SearchForTarget(Vector3 searchArea, Vector3 facingDirection)
+    private Vector3 _searchArea;
+
+    public void InitializeSearchArea(float leftEdge, float rightEdge, float bottom)
+    {
+        _searchArea = new Vector3(leftEdge, rightEdge, bottom);
+    }
+
+    public void SearchForTarget(Vector3 facingDirection)
     {
         Vector3 targetPosition = _target.position;
 
-        if (IsTargetWithinArea(targetPosition, searchArea) && IsTargetInSight(targetPosition, facingDirection))
+        if (IsTargetWithinArea(targetPosition) && IsTargetInSight(targetPosition, facingDirection))
         {
             TargetDetected?.Invoke();
             return;
@@ -41,13 +50,13 @@ public class TargetSearcher : MonoBehaviour
         return false;
     }
 
-    private bool IsTargetWithinArea(Vector3 targetPosition, Vector3 searchingArea)
+    private bool IsTargetWithinArea(Vector3 targetPosition)
     {
         bool withinEdges;
         bool aboveGround;
 
-        withinEdges = targetPosition.x > searchingArea.x && targetPosition.x < searchingArea.y;
-        aboveGround = targetPosition.y > searchingArea.z;
+        withinEdges = targetPosition.x > _searchArea.x && targetPosition.x < _searchArea.y;
+        aboveGround = targetPosition.y > _searchArea.z;
 
         return withinEdges && aboveGround;
     }
