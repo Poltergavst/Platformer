@@ -54,7 +54,7 @@ public class Player : MonoBehaviour, IDamagable
         }
     }
 
-    public void TakeDamage(Vector3 hitterPosition, int damage)
+    public void TakeDamage(Vector3 hitterPosition, float damage)
     {
         if (_isDead)
         {
@@ -113,7 +113,7 @@ public class Player : MonoBehaviour, IDamagable
 
         transform.position = _spawnPoint.position;
 
-        _health.Reset();
+        _health.SetToMax();
 
         StartMovement();
     }

@@ -66,7 +66,7 @@ public class Enemy : PlayerInteractor, IDamagable
         return Mathf.Abs(deviationFromTop) < maxDeviation;
     }
 
-    public void TakeDamage(Vector3 hitterPosition, int damage)
+    public void TakeDamage(Vector3 hitterPosition, float damage)
     {
         _knockbacker.TakeKnockback(hitterPosition);
         _health.Decrease(damage);
@@ -103,7 +103,7 @@ public class Enemy : PlayerInteractor, IDamagable
         transform.position = new Vector3(transform.position.x, _defaultPosition.y, transform.position.z);
         transform.localScale = _defaultScale;
 
-        _health.Reset();
+        _health.SetToMax();
         _movement.StartMovement();
     }
 

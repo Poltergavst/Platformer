@@ -1,24 +1,27 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private int _max;
+    [SerializeField] private float _max;
 
-    private int _min;
+    private float _min;
 
+    public event Action<float> Changed;
+    public event Action Reset;
     public event Action Expired;
 
-    public int Current { get; private set; }
+    public float Max => _max;
+    public float Min => _min;
+    public float Current { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         _min = 0;
         Current = _max;
     }
 
-    public void Decrease(int amount)
+    public void Decrease(float amount)
     {
         if (amount < 0)
             return;
@@ -31,7 +34,7 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void Increase(int amount)
+    public void Increase(float amount)
     {
         if (amount < 0)
             return;
@@ -39,17 +42,19 @@ public class Health : MonoBehaviour
         ChangeCurrent(amount);
     }
 
-    private void ChangeCurrent(int amount)
+    private void ChangeCurrent(float amount)
     {
         Current += amount;
 
-        Debug.Log(Current);
-
         Current = Mathf.Clamp(Current, _min, _max);
+
+        Changed?.Invoke(Current);
     }
 
-    public void Reset()
+    public void SetToMax()
     {
-        Current = _max;
+        ChangeCurrent(_max);
+
+        Reset?.Invoke();
     }
 }
