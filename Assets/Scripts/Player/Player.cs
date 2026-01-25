@@ -14,8 +14,9 @@ public class Player : MonoBehaviour, IDamagable
     private InputReader _inputReader;
     private PlayerMover _movement;
     private Knockbacker _knockbacker;
-    private PlayerAnimationHandler _animationHandler;
     private Attacker _attacker;
+    private Vampirism _vampirism;
+    private PlayerAnimationHandler _animationHandler;
 
     private Health _health;
 
@@ -32,6 +33,7 @@ public class Player : MonoBehaviour, IDamagable
         _knockbacker = GetComponent<Knockbacker>();
         _animationHandler = GetComponent<PlayerAnimationHandler>();
         _attacker = GetComponent<Attacker>();
+        _vampirism = GetComponent<Vampirism>();
 
         _health = GetComponent<Health>(); ;
     }
@@ -51,6 +53,11 @@ public class Player : MonoBehaviour, IDamagable
         if (_inputReader.IsAttackPressed())
         {
             _attacker.InitiateAttack();
+        }
+
+        if (_inputReader.IsAbilityPressed())
+        {
+            _vampirism.Activate();
         }
     }
 
@@ -93,6 +100,7 @@ public class Player : MonoBehaviour, IDamagable
         _collider.enabled = false;
 
         StopMovement();
+        _vampirism.Deactivate();
 
         StartRespawn();
     }
@@ -114,6 +122,7 @@ public class Player : MonoBehaviour, IDamagable
         transform.position = _spawnPoint.position;
 
         _health.SetToMax();
+        _vampirism.Reset();
 
         StartMovement();
     }

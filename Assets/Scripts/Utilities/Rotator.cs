@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class Rotator: MonoBehaviour
 {
+    public event Action Turned;
+
     public bool IsFacingRight { get; private set; }
 
     public void Turn(float positionX, float directionX)
@@ -19,6 +22,8 @@ public class Rotator: MonoBehaviour
             rotationValue = IsFacingRight ? rightTurnValue : leftTurnValue;
 
             transform.rotation = Quaternion.Euler(initialRotation.x, rotationValue, initialRotation.y);
+
+            Turned?.Invoke();
         }
     }
 }
