@@ -16,7 +16,7 @@ public class Knockbacker : MonoBehaviour
     public event Action KnockbackEnded;
     public event Action KnockbackStarted;
 
-    private void Start()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }

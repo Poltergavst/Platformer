@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 public class Vampirism : MonoBehaviour
 {
-    [SerializeField] float _abilityRadius = 3f;
+    [SerializeField] private float _abilityRadius = 3f;
     [SerializeField] private LayerMask _affectedTargets;
 
     private float _duration = 6f;
@@ -26,7 +26,7 @@ public class Vampirism : MonoBehaviour
 
     public float AbilityRadius => _abilityRadius;
 
-    private void Start()
+    private void Awake()
     {
         _health = GetComponent<Health>();
     }
@@ -63,7 +63,15 @@ public class Vampirism : MonoBehaviour
 
     private bool TryGetTarget(out Health target)
     {
-        Collider2D closestTarget = FindClosestTarget(Physics2D.OverlapCircleAll(transform.position, _abilityRadius, _affectedTargets));
+        int targetsBufferSize = 5;
+        Collider2D closestTarget = null;
+
+        Collider2D[] targetsInRadius = new Collider2D[targetsBufferSize];
+
+        if (Physics2D.OverlapCircleNonAlloc(transform.position, _abilityRadius, targetsInRadius, _affectedTargets) > 0)
+        {
+            closestTarget = FindClosestTarget(targetsInRadius);
+        }
 
         if (closestTarget == null)
         {
@@ -76,26 +84,26 @@ public class Vampirism : MonoBehaviour
 
     private Collider2D FindClosestTarget(Collider2D[] targets)
     {
-        if(targets.Length > 0)
+        float shortestDistance = _abilityRadius;
+        Collider2D closestTarget = null;
+
+        foreach (Collider2D target in targets)
         {
-            float shortestDistance = _abilityRadius;
-            Collider2D closestTarget = null;
-
-            foreach (Collider2D target in targets)
+            if (target == null)
             {
-                float distance = transform.position.SqrDistanceTo(target.transform.position);
-
-                if(distance <= shortestDistance)
-                {
-                    shortestDistance = distance;
-                    closestTarget = target;
-                }
+                continue;
             }
 
-            return closestTarget;
+            float distance = transform.position.SqrDistanceTo(target.transform.position);
+
+            if (distance <= shortestDistance)
+            {
+                shortestDistance = distance;
+                closestTarget = target;
+            }
         }
 
-        return null;
+        return closestTarget;
     }
 
     private float CalculateHealthPerFrame(float maxHealth)
